@@ -2,11 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Custom AI Camera Trainer</title>
 
@@ -45,14 +41,11 @@
             word-break: break-word;
         }
 
-        /* ==========================================
-           CAMERA
-        ========================================== */
+        /* CAMERA */
 
         .video-container {
             position: relative;
             width: 100%;
-            margin: 0 auto;
             overflow: hidden;
             border: 2px solid #444;
             border-radius: 8px;
@@ -67,9 +60,7 @@
             background: #000;
         }
 
-        /* ==========================================
-           CAMERA PREDICTION OVERLAY
-        ========================================== */
+        /* PREDICTION OVERLAY */
 
         #prediction-overlay {
             display: none;
@@ -80,7 +71,7 @@
             padding: 12px 14px;
             border-radius: 8px;
             color: white;
-            background: rgba(0, 0, 0, 0.75);
+            background: rgba(0, 0, 0, 0.76);
             font-size: 1.2rem;
             font-weight: bold;
             pointer-events: none;
@@ -110,9 +101,7 @@
             opacity: 0.9;
         }
 
-        /* ==========================================
-           BUTTONS
-        ========================================== */
+        /* BUTTONS */
 
         button {
             width: 100%;
@@ -131,7 +120,7 @@
         }
 
         button:disabled {
-            opacity: 0.45;
+            opacity: 0.4;
             cursor: not-allowed;
         }
 
@@ -140,9 +129,7 @@
             background: #607d8b;
         }
 
-        /* ==========================================
-           CURRENT ITEM
-        ========================================== */
+        /* CURRENT ITEM */
 
         .current-title {
             color: #00bcd4;
@@ -163,6 +150,10 @@
             border: 2px solid #008ba3;
         }
 
+        .trained-item {
+            border-left: 4px solid #4caf50;
+        }
+
         .class-heading {
             color: #aaa;
             font-size: 0.82rem;
@@ -180,9 +171,22 @@
             border-radius: 4px;
         }
 
+        /* ADD SAMPLE + DONE ROW */
+
+        .training-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
         .sample-button {
             background: #008ba3;
-            margin-top: 8px;
+            flex: 2;
+        }
+
+        .done-button {
+            background: #4caf50;
+            flex: 1;
         }
 
         .class-footer {
@@ -198,6 +202,13 @@
             font-size: 0.88rem;
         }
 
+        .sample-hint {
+            color: #777;
+            font-size: 0.75rem;
+            margin-top: 5px;
+            text-align: left;
+        }
+
         .remove-button {
             width: auto;
             padding: 7px 10px;
@@ -205,9 +216,7 @@
             font-size: 0.82rem;
         }
 
-        /* ==========================================
-           PREDICTION CONTROLS
-        ========================================== */
+        /* PREDICTION CONTROLS */
 
         .action-row {
             display: flex;
@@ -223,9 +232,7 @@
             background: #f44336;
         }
 
-        /* ==========================================
-           THRESHOLD
-        ========================================== */
+        /* THRESHOLD */
 
         .settings-box {
             background: #1e1e1e;
@@ -265,9 +272,7 @@
             margin-top: 7px;
         }
 
-        /* ==========================================
-           TRAINED ITEMS
-        ========================================== */
+        /* PREVIOUSLY TRAINED */
 
         #trained-section {
             margin-top: 15px;
@@ -286,13 +291,7 @@
             display: none;
         }
 
-        .trained-item {
-            border-left: 4px solid #4caf50;
-        }
-
-        /* ==========================================
-           SAVE / LOAD
-        ========================================== */
+        /* SAVE / LOAD */
 
         .data-row {
             display: flex;
@@ -320,7 +319,6 @@
         }
 
         @media (max-width: 380px) {
-
             video {
                 height: 260px;
             }
@@ -330,9 +328,7 @@
                 flex-direction: column;
             }
         }
-
     </style>
-
 
     <!-- TensorFlow.js -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js"></script>
@@ -342,7 +338,6 @@
 
     <!-- KNN Classifier -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/knn-classifier@1.2.6/dist/knn-classifier.min.js"></script>
-
 </head>
 
 <body>
@@ -355,10 +350,7 @@
         Initializing system...
     </div>
 
-
-    <!-- ==========================================
-         CAMERA
-    =========================================== -->
+    <!-- CAMERA -->
 
     <div class="video-container">
 
@@ -369,31 +361,23 @@
             muted
         ></video>
 
-
-        <!-- Prediction appears over the video -->
-
         <div
             id="prediction-overlay"
             role="status"
             aria-live="polite"
         >
-
             <span
                 id="overlay-name"
                 class="overlay-name"
-            >
-                Waiting
-            </span>
+            ></span>
 
             <span
                 id="overlay-confidence"
                 class="overlay-confidence"
             ></span>
-
         </div>
 
     </div>
-
 
     <button
         id="toggle-camera"
@@ -403,12 +387,7 @@
         Switch to Rear Camera
     </button>
 
-
-    <!-- ==========================================
-         CURRENT ITEM
-
-         Only ONE new item stays here.
-    =========================================== -->
+    <!-- CURRENT ITEM -->
 
     <div class="current-title">
         CURRENT ITEM
@@ -416,10 +395,7 @@
 
     <div id="current-class-container"></div>
 
-
-    <!-- ==========================================
-         PREDICTION CONTROLS
-    =========================================== -->
+    <!-- PREDICTION CONTROLS -->
 
     <div class="action-row">
 
@@ -440,10 +416,7 @@
 
     </div>
 
-
-    <!-- ==========================================
-         CONFIDENCE THRESHOLD
-    =========================================== -->
+    <!-- THRESHOLD -->
 
     <div class="settings-box">
 
@@ -473,15 +446,12 @@
 
         <div class="threshold-note">
             Predictions below this level will display
-            “Unrecognized Item”.
+            "Unrecognized Item".
         </div>
 
     </div>
 
-
-    <!-- ==========================================
-         PREVIOUSLY TRAINED ITEMS
-    =========================================== -->
+    <!-- TRAINED ITEMS -->
 
     <div
         id="trained-section"
@@ -502,10 +472,7 @@
 
     </div>
 
-
-    <!-- ==========================================
-         SAVE / LOAD
-    =========================================== -->
+    <!-- SAVE / LOAD -->
 
     <div class="data-row">
 
@@ -527,22 +494,19 @@
 
     </div>
 
-
     <input
         id="training-file"
         type="file"
         accept=".json,application/json"
     >
 
-
     <div class="small-note">
-        Training files contain MobileNet feature data,
-        item names and settings. Camera photographs are
-        not saved.
+        Training files contain AI feature data,
+        item names, sample counts and threshold settings.
+        Camera photographs are not saved.
     </div>
 
 </div>
-
 
 <script>
 "use strict";
@@ -605,7 +569,7 @@ const thresholdValue =
 
 
 // ========================================================
-// APPLICATION STATE
+// STATE
 // ========================================================
 
 let classifier = null;
@@ -614,15 +578,12 @@ let mobilenetModel = null;
 let useRearCamera = false;
 
 let isPredicting = false;
-
 let predictionFrame = null;
 
 let nextClassId = 0;
-
 let currentClassId = null;
 
-const classRecords =
-    new Map();
+const classRecords = new Map();
 
 
 // ========================================================
@@ -637,7 +598,6 @@ function getConfidenceThreshold() {
 
 }
 
-
 thresholdSlider.addEventListener(
     "input",
     function () {
@@ -650,40 +610,31 @@ thresholdSlider.addEventListener(
 
 
 // ========================================================
-// LIBRARY CHECK
+// CHECK LIBRARIES
 // ========================================================
 
 function checkLibraries() {
 
     if (typeof tf === "undefined") {
-
         throw new Error(
             "TensorFlow.js failed to load."
         );
-
     }
 
-
     if (typeof mobilenet === "undefined") {
-
         throw new Error(
             "MobileNet failed to load."
         );
-
     }
 
-
     if (typeof knnClassifier === "undefined") {
-
         throw new Error(
             "KNN Classifier failed to load."
         );
-
     }
 
-
     console.log(
-        "TensorFlow.js:",
+        "TensorFlow.js version:",
         tf.version.tfjs
     );
 
@@ -700,17 +651,13 @@ function stopCurrentCamera() {
         return;
     }
 
-
     video.srcObject
         .getTracks()
         .forEach(
             function (track) {
-
                 track.stop();
-
             }
         );
-
 
     video.srcObject = null;
 
@@ -722,20 +669,16 @@ async function attachCameraStream(stream) {
     video.srcObject =
         stream;
 
-
     await new Promise(
         function (resolve) {
 
             video.onloadedmetadata =
                 function () {
-
                     resolve();
-
                 };
 
         }
     );
-
 
     await video.play();
 
@@ -745,7 +688,6 @@ async function attachCameraStream(stream) {
 async function setupCamera() {
 
     stopCurrentCamera();
-
 
     const constraints = {
 
@@ -770,7 +712,6 @@ async function setupCamera() {
 
     };
 
-
     try {
 
         const stream =
@@ -779,20 +720,16 @@ async function setupCamera() {
                     constraints
                 );
 
-
         await attachCameraStream(
             stream
         );
 
-    }
-
-    catch (preferredError) {
+    } catch (preferredError) {
 
         console.warn(
             "Preferred camera failed:",
             preferredError
         );
-
 
         const fallbackStream =
             await navigator.mediaDevices
@@ -800,7 +737,6 @@ async function setupCamera() {
                     video: true,
                     audio: false
                 });
-
 
         await attachCameraStream(
             fallbackStream
@@ -816,50 +752,38 @@ async function switchCamera() {
     const shouldResume =
         isPredicting;
 
-
     stopPrediction(false);
-
 
     useRearCamera =
         !useRearCamera;
-
 
     toggleCameraButton.textContent =
         useRearCamera
             ? "Switch to Front Camera"
             : "Switch to Rear Camera";
 
-
     try {
 
         statusDiv.textContent =
             "Switching camera...";
 
-
         await setupCamera();
-
 
         statusDiv.textContent =
             (useRearCamera ? "Rear" : "Front") +
             " camera active.";
-
 
         if (
             shouldResume &&
             classifier &&
             classifier.getNumClasses() > 0
         ) {
-
             startPrediction();
-
         }
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         console.error(error);
-
 
         statusDiv.textContent =
             "Camera Error: " +
@@ -871,7 +795,7 @@ async function switchCamera() {
 
 
 // ========================================================
-// CLASS UTILITIES
+// CLASS HELPERS
 // ========================================================
 
 function getDefaultClassName(classId) {
@@ -889,13 +813,9 @@ function getClassName(classId) {
             classId
         );
 
-
     if (!record) {
-
         return "Unknown Item";
-
     }
-
 
     return (
         record.input.value.trim() ||
@@ -922,7 +842,7 @@ function formatSampleCount(count) {
 
 
 // ========================================================
-// CREATE ITEM PANEL
+// CREATE CLASS PANEL
 // ========================================================
 
 function createClassPanel(
@@ -934,11 +854,12 @@ function createClassPanel(
 
     let classId;
 
-
     if (
         requestedClassId !== null &&
         Number.isInteger(
-            Number(requestedClassId)
+            Number(
+                requestedClassId
+            )
         )
     ) {
 
@@ -947,16 +868,13 @@ function createClassPanel(
                 requestedClassId
             );
 
-
         nextClassId =
             Math.max(
                 nextClassId,
                 classId + 1
             );
 
-    }
-
-    else {
+    } else {
 
         classId =
             nextClassId;
@@ -971,10 +889,8 @@ function createClassPanel(
             "div"
         );
 
-
     panel.className =
         "class-group";
-
 
     panel.dataset.classId =
         String(classId);
@@ -985,14 +901,12 @@ function createClassPanel(
             "div"
         );
 
-
     heading.className =
         "class-heading";
 
-
     heading.textContent =
         makeCurrent
-            ? "New item"
+            ? "Take several samples, then press Done"
             : "Trained item";
 
 
@@ -1001,14 +915,11 @@ function createClassPanel(
             "input"
         );
 
-
     input.type =
         "text";
 
-
     input.className =
         "class-name";
-
 
     input.value =
         requestedName ||
@@ -1016,24 +927,22 @@ function createClassPanel(
             classId
         );
 
-
     input.placeholder =
         "Enter item name";
 
+
+    // ADD SAMPLE BUTTON
 
     const sampleButton =
         document.createElement(
             "button"
         );
 
-
     sampleButton.type =
         "button";
 
-
     sampleButton.className =
         "sample-button";
-
 
     sampleButton.disabled =
         !classifier ||
@@ -1045,10 +954,8 @@ function createClassPanel(
             "span"
         );
 
-
     buttonLabel.textContent =
         input.value;
-
 
     sampleButton.append(
         document.createTextNode(
@@ -1058,11 +965,68 @@ function createClassPanel(
     );
 
 
-    const footer =
+    // DONE BUTTON
+
+    const doneButton =
+        document.createElement(
+            "button"
+        );
+
+    doneButton.type =
+        "button";
+
+    doneButton.className =
+        "done-button";
+
+    doneButton.textContent =
+        "Done";
+
+    /*
+        A current item cannot be completed
+        until at least one sample exists.
+    */
+
+    doneButton.disabled =
+        makeCurrent &&
+        Number(requestedCount) === 0;
+
+
+    // BUTTON ROW
+
+    const trainingButtons =
         document.createElement(
             "div"
         );
 
+    trainingButtons.className =
+        "training-buttons";
+
+    trainingButtons.append(
+        sampleButton
+    );
+
+    /*
+        Only the current item needs Done.
+
+        Previous items retain Add Sample so
+        more examples can be added later.
+    */
+
+    if (makeCurrent) {
+
+        trainingButtons.append(
+            doneButton
+        );
+
+    }
+
+
+    // FOOTER
+
+    const footer =
+        document.createElement(
+            "div"
+        );
 
     footer.className =
         "class-footer";
@@ -1073,10 +1037,8 @@ function createClassPanel(
             "span"
         );
 
-
     countElement.className =
         "sample-count";
-
 
     countElement.textContent =
         formatSampleCount(
@@ -1091,14 +1053,11 @@ function createClassPanel(
             "button"
         );
 
-
     removeButton.type =
         "button";
 
-
     removeButton.className =
         "remove-button";
-
 
     removeButton.textContent =
         "Remove";
@@ -1110,46 +1069,50 @@ function createClassPanel(
     );
 
 
+    const hint =
+        document.createElement(
+            "div"
+        );
+
+    hint.className =
+        "sample-hint";
+
+    hint.textContent =
+        makeCurrent
+            ? "Tip: take multiple samples from different angles before pressing Done."
+            : "You can continue adding samples to improve this item.";
+
+
     panel.append(
         heading,
         input,
-        sampleButton,
-        footer
+        trainingButtons,
+        footer,
+        hint
     );
 
 
     if (makeCurrent) {
 
-        /*
-            Only one current item should
-            occupy this area.
-        */
-
         currentClassContainer.innerHTML =
             "";
-
 
         panel.classList.add(
             "current-item"
         );
 
-
         currentClassContainer.appendChild(
             panel
         );
 
-
         currentClassId =
             classId;
 
-    }
-
-    else {
+    } else {
 
         panel.classList.add(
             "trained-item"
         );
-
 
         trainedList.prepend(
             panel
@@ -1178,8 +1141,14 @@ function createClassPanel(
         buttonLabel:
             buttonLabel,
 
+        doneButton:
+            doneButton,
+
         countElement:
             countElement,
+
+        hint:
+            hint,
 
         sampleCount:
             Number(
@@ -1198,6 +1167,8 @@ function createClassPanel(
     );
 
 
+    // NAME CHANGE
+
     input.addEventListener(
         "input",
         function () {
@@ -1212,6 +1183,8 @@ function createClassPanel(
     );
 
 
+    // ADD SAMPLE
+
     sampleButton.addEventListener(
         "click",
         function () {
@@ -1223,6 +1196,22 @@ function createClassPanel(
         }
     );
 
+
+    // DONE
+
+    doneButton.addEventListener(
+        "click",
+        function () {
+
+            finishCurrentItem(
+                classId
+            );
+
+        }
+    );
+
+
+    // REMOVE
 
     removeButton.addEventListener(
         "click",
@@ -1238,127 +1227,13 @@ function createClassPanel(
 
     updateTrainedSection();
 
-
     return record;
 
 }
 
 
 // ========================================================
-// MOVE CURRENT ITEM TO TRAINED LIST
-// ========================================================
-
-function moveCurrentItemToTrained(
-    classId
-) {
-
-    const record =
-        classRecords.get(
-            classId
-        );
-
-
-    if (!record) {
-        return;
-    }
-
-
-    record.isCurrent =
-        false;
-
-
-    record.heading.textContent =
-        "Trained item";
-
-
-    record.element.classList.remove(
-        "current-item"
-    );
-
-
-    record.element.classList.add(
-        "trained-item"
-    );
-
-
-    /*
-        Most recently trained item
-        appears at top of trained list.
-    */
-
-    trainedList.prepend(
-        record.element
-    );
-
-
-    currentClassId =
-        null;
-
-
-    updateTrainedSection();
-
-}
-
-
-// ========================================================
-// TRAINED SECTION
-// ========================================================
-
-function getTrainedCount() {
-
-    let total = 0;
-
-
-    classRecords.forEach(
-        function (record) {
-
-            if (
-                !record.isCurrent &&
-                record.sampleCount > 0
-            ) {
-
-                total++;
-
-            }
-
-        }
-    );
-
-
-    return total;
-
-}
-
-
-function updateTrainedSection() {
-
-    const count =
-        getTrainedCount();
-
-
-    trainedToggle.textContent =
-        (
-            trainedList.classList.contains(
-                "trained-hidden"
-            )
-                ? "▼ "
-                : "▲ "
-        ) +
-        "Previously Trained Items (" +
-        count +
-        ")";
-
-
-    trainedSection.style.display =
-        count > 0
-            ? "block"
-            : "none";
-
-}
-
-
-// ========================================================
-// ADD EXAMPLE
+// ADD SAMPLE
 // ========================================================
 
 function addExample(classId) {
@@ -1367,7 +1242,6 @@ function addExample(classId) {
         classRecords.get(
             classId
         );
-
 
     if (!record) {
         return;
@@ -1426,64 +1300,34 @@ function addExample(classId) {
             );
 
 
+        /*
+            Enable Done as soon as at least
+            one sample has been collected.
+        */
+
+        if (
+            record.isCurrent &&
+            record.doneButton
+        ) {
+
+            record.doneButton.disabled =
+                false;
+
+        }
+
+
         const className =
             getClassName(
                 classId
             );
 
 
-        /*
-            If this was the FIRST sample
-            for the CURRENT item:
-
-            1. Move it down.
-            2. Create a new current item.
-        */
-
-        if (
-            record.sampleCount === 1 &&
-            record.isCurrent
-        ) {
-
-            moveCurrentItemToTrained(
-                classId
-            );
-
-
-            const newRecord =
-                createClassPanel();
-
-
-            enableControls();
-
-
-            /*
-                Select the new item name
-                immediately for easy typing.
-            */
-
-            newRecord.input.focus();
-
-            newRecord.input.select();
-
-
-            statusDiv.textContent =
-                '"' +
-                className +
-                '" added. Train the next item.';
-
-        }
-
-        else {
-
-            statusDiv.textContent =
-                'Added sample for "' +
-                className +
-                '". Total: ' +
-                record.sampleCount +
-                ".";
-
-        }
+        statusDiv.textContent =
+            'Added sample for "' +
+            className +
+            '". Total samples: ' +
+            record.sampleCount +
+            ".";
 
 
         updateSaveButton();
@@ -1507,12 +1351,131 @@ function addExample(classId) {
     finally {
 
         if (activation) {
-
             activation.dispose();
-
         }
 
     }
+
+}
+
+
+// ========================================================
+// DONE CURRENT ITEM
+// ========================================================
+
+function finishCurrentItem(classId) {
+
+    const record =
+        classRecords.get(
+            classId
+        );
+
+
+    if (!record) {
+        return;
+    }
+
+
+    if (!record.isCurrent) {
+        return;
+    }
+
+
+    if (record.sampleCount < 1) {
+
+        statusDiv.textContent =
+            "Please add at least one sample before pressing Done.";
+
+        return;
+
+    }
+
+
+    const finishedName =
+        getClassName(
+            classId
+        );
+
+
+    // Mark as trained
+
+    record.isCurrent =
+        false;
+
+
+    record.heading.textContent =
+        "Trained item";
+
+
+    record.element.classList.remove(
+        "current-item"
+    );
+
+
+    record.element.classList.add(
+        "trained-item"
+    );
+
+
+    record.hint.textContent =
+        "You can continue adding samples to improve this item.";
+
+
+    /*
+        Remove the Done button.
+        Add Sample remains available.
+    */
+
+    if (
+        record.doneButton &&
+        record.doneButton.parentElement
+    ) {
+
+        record.doneButton.remove();
+
+    }
+
+
+    /*
+        Move completed item to the top
+        of the previous-items list.
+    */
+
+    trainedList.prepend(
+        record.element
+    );
+
+
+    currentClassId =
+        null;
+
+
+    updateTrainedSection();
+
+
+    /*
+        Create the next new item immediately
+        underneath the camera.
+    */
+
+    const newRecord =
+        createClassPanel();
+
+
+    enableControls();
+
+
+    newRecord.input.focus();
+
+    newRecord.input.select();
+
+
+    statusDiv.textContent =
+        '"' +
+        finishedName +
+        '" completed with ' +
+        record.sampleCount +
+        " training samples. Train the next item.";
 
 }
 
@@ -1555,6 +1518,7 @@ function removeClass(classId) {
     catch (error) {
 
         console.warn(
+            "Could not clear classifier class:",
             error
         );
 
@@ -1580,8 +1544,7 @@ function removeClass(classId) {
 
 
     /*
-        Always make sure there is
-        one current item available.
+        Always maintain one current item.
     */
 
     if (
@@ -1607,7 +1570,68 @@ function removeClass(classId) {
 
 
 // ========================================================
-// CONTROLS
+// TRAINED ITEMS
+// ========================================================
+
+function getTrainedCount() {
+
+    let count = 0;
+
+
+    classRecords.forEach(
+        function (record) {
+
+            if (
+                !record.isCurrent &&
+                record.sampleCount > 0
+            ) {
+
+                count++;
+
+            }
+
+        }
+    );
+
+
+    return count;
+
+}
+
+
+function updateTrainedSection() {
+
+    const count =
+        getTrainedCount();
+
+
+    const hidden =
+        trainedList.classList.contains(
+            "trained-hidden"
+        );
+
+
+    trainedToggle.textContent =
+        (
+            hidden
+                ? "▼ "
+                : "▲ "
+        ) +
+        "Previously Trained Items (" +
+        count +
+        ")";
+
+
+    trainedSection.style.display =
+        count > 0
+            ? "block"
+            : "none";
+
+}
+
+
+// ========================================================
+// ENABLE CONTROLS
 // ========================================================
 
 function enableControls() {
@@ -1624,6 +1648,18 @@ function enableControls() {
 
             record.button.disabled =
                 !ready;
+
+
+            if (
+                record.isCurrent &&
+                record.doneButton
+            ) {
+
+                record.doneButton.disabled =
+                    !ready ||
+                    record.sampleCount === 0;
+
+            }
 
         }
     );
@@ -1792,7 +1828,6 @@ function stopPrediction(
             predictionFrame
         );
 
-
         predictionFrame =
             null;
 
@@ -1818,9 +1853,7 @@ function togglePrediction() {
 
         stopPrediction(true);
 
-    }
-
-    else {
+    } else {
 
         startPrediction();
 
@@ -1919,9 +1952,7 @@ async function runPredictionLoop() {
                 confidencePercent
             );
 
-        }
-
-        else {
+        } else {
 
             showRecognizedOverlay(
                 getClassName(
@@ -1937,6 +1968,7 @@ async function runPredictionLoop() {
     catch (error) {
 
         console.error(
+            "Prediction error:",
             error
         );
 
@@ -2064,7 +2096,10 @@ async function saveTrainingData() {
                             ),
 
                         sampleCount:
-                            record.sampleCount
+                            record.sampleCount,
+
+                        isCurrent:
+                            record.isCurrent
 
                     };
 
@@ -2078,7 +2113,7 @@ async function saveTrainingData() {
                 "AEYE-KNN-Training",
 
             formatVersion:
-                1,
+                2,
 
             tensorflowVersion:
                 tf.version.tfjs,
@@ -2170,6 +2205,7 @@ async function saveTrainingData() {
     catch (error) {
 
         console.error(
+            "Save training error:",
             error
         );
 
@@ -2184,7 +2220,7 @@ async function saveTrainingData() {
 
 
 // ========================================================
-// LOAD TRAINING DATA
+// VALIDATE LOAD FILE
 // ========================================================
 
 function validateTrainingData(data) {
@@ -2240,6 +2276,10 @@ function validateTrainingData(data) {
 }
 
 
+// ========================================================
+// CLEAR UI CLASSES
+// ========================================================
+
 function clearClassPanels() {
 
     classRecords.forEach(
@@ -2275,6 +2315,10 @@ function clearClassPanels() {
 
 }
 
+
+// ========================================================
+// LOAD TRAINING DATA
+// ========================================================
 
 async function loadTrainingFile(file) {
 
@@ -2394,9 +2438,12 @@ async function loadTrainingFile(file) {
 
 
         /*
-            Loaded classes are already trained,
-            so they go directly into the
-            Previously Trained Items section.
+            Any class loaded from the saved
+            training file goes into the
+            Previously Trained Items area.
+
+            A fresh CURRENT ITEM will then
+            be created under the camera.
         */
 
         sortedClasses.forEach(
@@ -2446,8 +2493,8 @@ async function loadTrainingFile(file) {
 
 
         /*
-            Restore any dataset class not found
-            in the metadata.
+            Handle a dataset class that
+            doesn't appear in metadata.
         */
 
         Object.keys(
@@ -2489,13 +2536,15 @@ async function loadTrainingFile(file) {
 
 
         /*
-            Create one fresh current item
-            directly underneath the camera.
+            Always create one fresh CURRENT
+            ITEM underneath the camera.
         */
 
         const newRecord =
             createClassPanel();
 
+
+        // Restore threshold
 
         const savedThreshold =
             Number(
@@ -2615,7 +2664,7 @@ function resetAll() {
 
 
 // ========================================================
-// COLLAPSIBLE TRAINED LIST
+// PREVIOUS ITEMS COLLAPSE
 // ========================================================
 
 trainedToggle.addEventListener(
@@ -2634,7 +2683,7 @@ trainedToggle.addEventListener(
 
 
 // ========================================================
-// INITIALIZATION
+// INITIALIZE
 // ========================================================
 
 async function initializeApp() {
@@ -2684,7 +2733,7 @@ async function initializeApp() {
 
 
         statusDiv.textContent =
-            "Ready! Name the current item and add samples.";
+            "Ready! Add several samples, then press Done.";
 
     }
 
@@ -2767,13 +2816,7 @@ window.addEventListener(
     "load",
     function () {
 
-        /*
-            Start with one current item directly
-            underneath the camera.
-        */
-
         createClassPanel();
-
 
         initializeApp();
 
