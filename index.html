@@ -36,21 +36,6 @@
             margin: 0 auto;
         }
 
-        .video-container {
-            width: 100%;
-            margin: 0 auto;
-        }
-
-        video {
-            display: block;
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-            background: #000000;
-            border: 2px solid #444444;
-            border-radius: 8px;
-        }
-
         #status {
             color: #ff9800;
             font-size: 0.95rem;
@@ -60,15 +45,68 @@
             word-break: break-word;
         }
 
-        #prediction {
-            color: #4caf50;
-            background: #1e1e1e;
+        .video-container {
+            position: relative;
+            width: 100%;
+            margin: 0 auto;
+            overflow: hidden;
+            border: 2px solid #444444;
+            border-radius: 8px;
+            background: #000000;
+        }
+
+        video {
+            display: block;
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            background: #000000;
+        }
+
+        #prediction-overlay {
+            display: none;
+            position: absolute;
+            left: 12px;
+            right: 12px;
+            bottom: 12px;
+            padding: 12px 14px;
+            border-radius: 8px;
+            color: #ffffff;
+            background: rgba(0, 0, 0, 0.72);
+            border: 2px solid #4caf50;
             font-size: 1.2rem;
             font-weight: bold;
-            padding: 14px;
-            margin-top: 15px;
-            border-radius: 7px;
+            line-height: 1.3;
             word-break: break-word;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            pointer-events: none;
+        }
+
+        #prediction-overlay.recognized {
+            display: block;
+            color: #ffffff;
+            border-color: #4caf50;
+            background: rgba(20, 90, 25, 0.78);
+        }
+
+        #prediction-overlay.unrecognized {
+            display: block;
+            color: #ffffff;
+            border-color: #ff9800;
+            background: rgba(125, 70, 0, 0.82);
+        }
+
+        .overlay-name {
+            display: block;
+            font-size: 1.25rem;
+        }
+
+        .overlay-confidence {
+            display: block;
+            font-size: 0.85rem;
+            margin-top: 3px;
+            opacity: 0.9;
         }
 
         .controls {
@@ -79,7 +117,7 @@
             background: #1e1e1e;
             padding: 12px;
             border-radius: 7px;
-            margin-bottom: 12px;
+            margin: 12px 0;
             text-align: left;
         }
 
@@ -192,6 +230,11 @@
             background: #607d8b;
         }
 
+        .add-class-button {
+            background: #6a1b9a;
+            margin-top: 2px;
+        }
+
         .action-row {
             display: flex;
             gap: 10px;
@@ -206,9 +249,22 @@
             background: #f44336;
         }
 
-        .add-class-button {
-            background: #6a1b9a;
-            margin-top: 2px;
+        .data-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        #save-training {
+            background: #1565c0;
+        }
+
+        #load-training {
+            background: #ef6c00;
+        }
+
+        #training-file {
+            display: none;
         }
 
         .small-note {
@@ -223,7 +279,8 @@
                 height: 260px;
             }
 
-            .action-row {
+            .action-row,
+            .data-row {
                 flex-direction: column;
             }
         }
@@ -250,12 +307,32 @@
         </div>
 
         <div class="video-container">
+
             <video
                 id="webcam"
                 autoplay
                 playsinline
                 muted
             ></video>
+
+            <div
+                id="prediction-overlay"
+                role="status"
+                aria-live="polite"
+            >
+                <span
+                    id="overlay-name"
+                    class="overlay-name"
+                >
+                    Waiting for prediction
+                </span>
+
+                <span
+                    id="overlay-confidence"
+                    class="overlay-confidence"
+                ></span>
+            </div>
+
         </div>
 
         <div class="controls">
@@ -295,7 +372,7 @@
                 </div>
 
                 <div class="threshold-note">
-                    Results below this confidence level will be shown as
+                    Predictions below this confidence level will display
                     “Unrecognized Item”.
                 </div>
 
@@ -330,15 +407,38 @@
 
             </div>
 
-            <div class="small-note">
-                For better results, collect at least 10 to 20 samples for
-                each item from different angles and distances.
+            <div class="data-row">
+
+                <button
+                    id="save-training"
+                    type="button"
+                    disabled
+                >
+                    Save Training Data
+                </button>
+
+                <button
+                    id="load-training"
+                    type="button"
+                    disabled
+                >
+                    Load Training Data
+                </button>
+
             </div>
 
-        </div>
+            <input
+                id="training-file"
+                type="file"
+                accept=".json,application/json"
+            >
 
-        <div id="prediction">
-            Prediction: Model not ready
+            <div class="small-note">
+                Save Training Data downloads a JSON file containing the
+                trained feature vectors, item names and threshold. It does
+                not save or upload camera photos.
+            </div>
+
         </div>
 
     </div>
@@ -357,8 +457,14 @@
         const statusDiv =
             document.getElementById("status");
 
-        const predictionDiv =
-            document.getElementById("prediction");
+        const predictionOverlay =
+            document.getElementById("prediction-overlay");
+
+        const overlayName =
+            document.getElementById("overlay-name");
+
+        const overlayConfidence =
+            document.getElementById("overlay-confidence");
 
         const classesContainer =
             document.getElementById("classes-container");
@@ -374,6 +480,15 @@
 
         const resetButton =
             document.getElementById("reset");
+
+        const saveTrainingButton =
+            document.getElementById("save-training");
+
+        const loadTrainingButton =
+            document.getElementById("load-training");
+
+        const trainingFileInput =
+            document.getElementById("training-file");
 
         const thresholdSlider =
             document.getElementById("threshold");
@@ -395,21 +510,11 @@
 
         let nextClassId = 0;
 
-        /*
-            Each entry uses:
-
-            classId: numeric ID supplied to KNN
-            element: HTML class panel
-            input: item name input
-            button: Add Sample button
-            countElement: sample counter
-            sampleCount: number of collected samples
-        */
         const classRecords = new Map();
 
 
         // =====================================================
-        // SETTINGS
+        // THRESHOLD
         // =====================================================
 
         function getConfidenceThreshold() {
@@ -417,10 +522,13 @@
         }
 
 
-        thresholdSlider.addEventListener("input", function () {
-            thresholdValue.textContent =
-                thresholdSlider.value + "%";
-        });
+        thresholdSlider.addEventListener(
+            "input",
+            function () {
+                thresholdValue.textContent =
+                    thresholdSlider.value + "%";
+            }
+        );
 
 
         // =====================================================
@@ -525,7 +633,9 @@
                         audio: false
                     });
 
-                await attachCameraStream(fallbackStream);
+                await attachCameraStream(
+                    fallbackStream
+                );
             }
         }
 
@@ -596,15 +706,44 @@
         }
 
 
-        function createClassPanel() {
-            const classId = nextClassId;
-            nextClassId++;
+        function formatSampleCount(count) {
+            return (
+                count +
+                (count === 1 ? " sample" : " samples")
+            );
+        }
+
+
+        function createClassPanel(
+            requestedClassId = null,
+            requestedName = null,
+            requestedCount = 0
+        ) {
+            let classId;
+
+            if (
+                requestedClassId !== null &&
+                Number.isInteger(Number(requestedClassId))
+            ) {
+                classId =
+                    Number(requestedClassId);
+
+                nextClassId =
+                    Math.max(
+                        nextClassId,
+                        classId + 1
+                    );
+            } else {
+                classId = nextClassId;
+                nextClassId++;
+            }
 
             const panel =
                 document.createElement("div");
 
             panel.className = "class-group";
             panel.dataset.classId = String(classId);
+
 
             const heading =
                 document.createElement("div");
@@ -619,8 +758,12 @@
 
             input.type = "text";
             input.className = "class-name";
-            input.value = getDefaultClassName(classId);
+            input.value =
+                requestedName ||
+                getDefaultClassName(classId);
+
             input.placeholder = "Enter item name";
+
             input.setAttribute(
                 "aria-label",
                 "Name for item " + (classId + 1)
@@ -632,6 +775,7 @@
 
             sampleButton.type = "button";
             sampleButton.className = "sample-button";
+
             sampleButton.disabled =
                 !mobilenetModel || !classifier;
 
@@ -642,8 +786,11 @@
             buttonLabel.textContent =
                 input.value;
 
+
             sampleButton.append(
-                document.createTextNode("Add Sample: "),
+                document.createTextNode(
+                    "Add Sample: "
+                ),
                 buttonLabel
             );
 
@@ -657,16 +804,24 @@
             const countElement =
                 document.createElement("span");
 
-            countElement.className = "sample-count";
-            countElement.textContent = "0 samples";
+            countElement.className =
+                "sample-count";
+
+            countElement.textContent =
+                formatSampleCount(
+                    Number(requestedCount) || 0
+                );
 
 
             const removeButton =
                 document.createElement("button");
 
             removeButton.type = "button";
-            removeButton.className = "remove-button";
-            removeButton.textContent = "Remove";
+            removeButton.className =
+                "remove-button";
+
+            removeButton.textContent =
+                "Remove";
 
 
             footer.append(
@@ -683,7 +838,9 @@
             );
 
 
-            classesContainer.appendChild(panel);
+            classesContainer.appendChild(
+                panel
+            );
 
 
             const record = {
@@ -693,7 +850,8 @@
                 button: sampleButton,
                 buttonLabel: buttonLabel,
                 countElement: countElement,
-                sampleCount: 0
+                sampleCount:
+                    Number(requestedCount) || 0
             };
 
 
@@ -703,11 +861,16 @@
             );
 
 
-            input.addEventListener("input", function () {
-                buttonLabel.textContent =
-                    input.value.trim() ||
-                    getDefaultClassName(classId);
-            });
+            input.addEventListener(
+                "input",
+                function () {
+                    buttonLabel.textContent =
+                        input.value.trim() ||
+                        getDefaultClassName(
+                            classId
+                        );
+                }
+            );
 
 
             sampleButton.addEventListener(
@@ -730,14 +893,53 @@
         }
 
 
-        function enableClassButtons() {
-            classRecords.forEach(function (record) {
-                record.button.disabled =
-                    !mobilenetModel || !classifier;
-            });
+        function enableControls() {
+            const ready =
+                Boolean(
+                    mobilenetModel &&
+                    classifier
+                );
+
+            classRecords.forEach(
+                function (record) {
+                    record.button.disabled =
+                        !ready;
+                }
+            );
 
             predictButton.disabled =
-                !mobilenetModel || !classifier;
+                !ready;
+
+            loadTrainingButton.disabled =
+                !ready;
+
+            updateSaveButton();
+        }
+
+
+        function updateSaveButton() {
+            const canSave =
+                Boolean(
+                    classifier &&
+                    classifier.getNumClasses() > 0
+                );
+
+            saveTrainingButton.disabled =
+                !canSave;
+        }
+
+
+        function ensureEmptyClassExists() {
+            const hasEmptyClass =
+                Array.from(
+                    classRecords.values()
+                ).some(function (record) {
+                    return record.sampleCount === 0;
+                });
+
+            if (!hasEmptyClass) {
+                createClassPanel();
+            }
         }
 
 
@@ -745,20 +947,21 @@
             const record =
                 classRecords.get(classId);
 
-            if (!record || record.sampleCount !== 1) {
+            if (
+                !record ||
+                record.sampleCount !== 1
+            ) {
                 return;
             }
 
             const records =
-                Array.from(classRecords.values());
+                Array.from(
+                    classRecords.values()
+                );
 
             const lastRecord =
                 records[records.length - 1];
 
-            /*
-                Add a new empty item after the first sample
-                is collected for the latest item.
-            */
             if (
                 lastRecord &&
                 lastRecord.classId === classId
@@ -781,25 +984,20 @@
                 return;
             }
 
-            const wasPredicting =
-                isPredicting;
-
             stopPrediction(false);
 
-            /*
-                Clear only this class from KNN.
-                clearClass() is available in the KNN classifier.
-            */
             try {
                 if (
                     classifier &&
                     record.sampleCount > 0
                 ) {
-                    classifier.clearClass(classId);
+                    classifier.clearClass(
+                        classId
+                    );
                 }
             } catch (error) {
                 console.warn(
-                    "Unable to clear individual class:",
+                    "Unable to clear class:",
                     error
                 );
             }
@@ -807,30 +1005,29 @@
             record.element.remove();
             classRecords.delete(classId);
 
-            statusDiv.textContent =
-                "Item removed.";
-
             if (classRecords.size === 0) {
                 createClassPanel();
             }
 
-            const hasEmptyClass =
-                Array.from(classRecords.values())
-                    .some(function (item) {
-                        return item.sampleCount === 0;
-                    });
+            ensureEmptyClassExists();
+            updateSaveButton();
 
-            if (!hasEmptyClass) {
-                createClassPanel();
-            }
+            hidePredictionOverlay();
 
-            if (
-                wasPredicting &&
-                classifier &&
-                classifier.getNumClasses() > 0
-            ) {
-                startPrediction();
-            }
+            statusDiv.textContent =
+                "Item removed.";
+        }
+
+
+        function clearClassPanels() {
+            classRecords.forEach(
+                function (record) {
+                    record.element.remove();
+                }
+            );
+
+            classRecords.clear();
+            nextClassId = 0;
         }
 
 
@@ -846,15 +1043,20 @@
                 return;
             }
 
-            if (!mobilenetModel || !classifier) {
+            if (
+                !mobilenetModel ||
+                !classifier
+            ) {
                 statusDiv.textContent =
                     "AI model is not ready.";
+
                 return;
             }
 
             if (video.readyState < 2) {
                 statusDiv.textContent =
                     "Camera is not ready yet.";
+
                 return;
             }
 
@@ -875,24 +1077,22 @@
                 record.sampleCount++;
 
                 record.countElement.textContent =
-                    record.sampleCount +
-                    (
-                        record.sampleCount === 1
-                            ? " sample"
-                            : " samples"
+                    formatSampleCount(
+                        record.sampleCount
                     );
-
-                const className =
-                    getClassName(classId);
 
                 statusDiv.textContent =
                     'Added sample for "' +
-                    className +
+                    getClassName(classId) +
                     '". Total: ' +
                     record.sampleCount +
                     ".";
 
-                addEmptyClassIfNeeded(classId);
+                addEmptyClassIfNeeded(
+                    classId
+                );
+
+                updateSaveButton();
             } catch (error) {
                 console.error(
                     "Add sample error:",
@@ -903,10 +1103,73 @@
                     "Unable to add sample: " +
                     error.message;
             } finally {
+                /*
+                    addExample stores its own tensor data
+                    inside the KNN dataset.
+                */
                 if (activation) {
                     activation.dispose();
                 }
             }
+        }
+
+
+        // =====================================================
+        // PREDICTION OVERLAY
+        // =====================================================
+
+        function showRecognizedOverlay(
+            itemName,
+            confidencePercent
+        ) {
+            predictionOverlay.className =
+                "recognized";
+
+            overlayName.textContent =
+                itemName;
+
+            overlayConfidence.textContent =
+                confidencePercent +
+                "% confidence";
+        }
+
+
+        function showUnrecognizedOverlay(
+            confidencePercent
+        ) {
+            predictionOverlay.className =
+                "unrecognized";
+
+            overlayName.textContent =
+                "Unrecognized Item";
+
+            overlayConfidence.textContent =
+                "Best match: " +
+                confidencePercent +
+                "%";
+        }
+
+
+        function showWaitingOverlay() {
+            predictionOverlay.className =
+                "unrecognized";
+
+            overlayName.textContent =
+                "Analysing camera...";
+
+            overlayConfidence.textContent =
+                "";
+        }
+
+
+        function hidePredictionOverlay() {
+            predictionOverlay.className = "";
+
+            overlayName.textContent =
+                "Waiting for prediction";
+
+            overlayConfidence.textContent =
+                "";
         }
 
 
@@ -918,13 +1181,17 @@
             if (!classifier) {
                 statusDiv.textContent =
                     "Classifier is not ready.";
+
                 return;
             }
 
-            if (classifier.getNumClasses() === 0) {
+            if (
+                classifier.getNumClasses() === 0
+            ) {
                 alert(
-                    "Please add training samples first."
+                    "Please add or load training samples first."
                 );
+
                 return;
             }
 
@@ -940,23 +1207,30 @@
             statusDiv.textContent =
                 "AI is running live prediction...";
 
+            showWaitingOverlay();
             runPredictionLoop();
         }
 
 
-        function stopPrediction(showStatus = true) {
+        function stopPrediction(
+            showStatus = true
+        ) {
             isPredicting = false;
 
             predictButton.textContent =
                 "Start Predicting";
 
-            if (predictionFrame !== null) {
+            if (
+                predictionFrame !== null
+            ) {
                 cancelAnimationFrame(
                     predictionFrame
                 );
 
                 predictionFrame = null;
             }
+
+            hidePredictionOverlay();
 
             if (showStatus) {
                 statusDiv.textContent =
@@ -988,8 +1262,8 @@
                 ) {
                     stopPrediction(false);
 
-                    predictionDiv.textContent =
-                        "Prediction: Model not ready";
+                    statusDiv.textContent =
+                        "No trained items available.";
 
                     return;
                 }
@@ -1037,33 +1311,20 @@
                         predictedClassId
                     );
 
-                /*
-                    Show Unrecognized Item when:
-
-                    1. Confidence is below the selected threshold, or
-                    2. The predicted class no longer exists in the UI.
-                */
                 if (
                     confidenceValue < threshold ||
                     !record
                 ) {
-                    predictionDiv.textContent =
-                        "Prediction: Unrecognized Item (" +
-                        confidencePercent +
-                        "%)";
-
-                    predictionDiv.style.color =
-                        "#ff9800";
+                    showUnrecognizedOverlay(
+                        confidencePercent
+                    );
                 } else {
-                    predictionDiv.textContent =
-                        "Prediction: " +
-                        getClassName(predictedClassId) +
-                        " (" +
-                        confidencePercent +
-                        "%)";
-
-                    predictionDiv.style.color =
-                        "#4caf50";
+                    showRecognizedOverlay(
+                        getClassName(
+                            predictedClassId
+                        ),
+                        confidencePercent
+                    );
                 }
             } catch (error) {
                 console.error(
@@ -1094,6 +1355,405 @@
 
 
         // =====================================================
+        // SAVE TRAINING DATA
+        // =====================================================
+
+        async function saveTrainingData() {
+            if (
+                !classifier ||
+                classifier.getNumClasses() === 0
+            ) {
+                alert(
+                    "There is no training data to save."
+                );
+
+                return;
+            }
+
+            stopPrediction(false);
+
+            try {
+                statusDiv.textContent =
+                    "Preparing training data...";
+
+                const dataset =
+                    classifier.getClassifierDataset();
+
+                const serializedDataset = {};
+
+                for (
+                    const classId
+                    of Object.keys(dataset)
+                ) {
+                    const tensor =
+                        dataset[classId];
+
+                    serializedDataset[classId] = {
+                        shape: tensor.shape,
+                        values:
+                            Array.from(
+                                await tensor.data()
+                            )
+                    };
+                }
+
+                const classes =
+                    Array.from(
+                        classRecords.values()
+                    )
+                    .filter(function (record) {
+                        return record.sampleCount > 0;
+                    })
+                    .map(function (record) {
+                        return {
+                            classId:
+                                record.classId,
+
+                            name:
+                                getClassName(
+                                    record.classId
+                                ),
+
+                            sampleCount:
+                                record.sampleCount
+                        };
+                    });
+
+                const saveData = {
+                    format:
+                        "AEYE-KNN-Training",
+
+                    formatVersion:
+                        1,
+
+                    tensorflowVersion:
+                        tf.version.tfjs,
+
+                    featureModel:
+                        "MobileNet conv_preds",
+
+                    confidenceThreshold:
+                        Number(
+                            thresholdSlider.value
+                        ),
+
+                    classes:
+                        classes,
+
+                    dataset:
+                        serializedDataset
+                };
+
+                const jsonText =
+                    JSON.stringify(
+                        saveData
+                    );
+
+                const blob =
+                    new Blob(
+                        [jsonText],
+                        {
+                            type:
+                                "application/json"
+                        }
+                    );
+
+                const downloadUrl =
+                    URL.createObjectURL(blob);
+
+                const link =
+                    document.createElement("a");
+
+                const dateText =
+                    new Date()
+                        .toISOString()
+                        .slice(0, 10);
+
+                link.href =
+                    downloadUrl;
+
+                link.download =
+                    "AEYE-training-" +
+                    dateText +
+                    ".json";
+
+                document.body.appendChild(
+                    link
+                );
+
+                link.click();
+                link.remove();
+
+                URL.revokeObjectURL(
+                    downloadUrl
+                );
+
+                statusDiv.textContent =
+                    "Training data saved successfully.";
+            } catch (error) {
+                console.error(
+                    "Save training error:",
+                    error
+                );
+
+                statusDiv.textContent =
+                    "Unable to save training data: " +
+                    error.message;
+            }
+        }
+
+
+        // =====================================================
+        // LOAD TRAINING DATA
+        // =====================================================
+
+        function validateTrainingData(data) {
+            if (
+                !data ||
+                typeof data !== "object"
+            ) {
+                throw new Error(
+                    "Invalid training file."
+                );
+            }
+
+            if (
+                data.format !==
+                "AEYE-KNN-Training"
+            ) {
+                throw new Error(
+                    "This is not an AEYE training file."
+                );
+            }
+
+            if (
+                !Array.isArray(data.classes)
+            ) {
+                throw new Error(
+                    "The training file has no class list."
+                );
+            }
+
+            if (
+                !data.dataset ||
+                typeof data.dataset !== "object"
+            ) {
+                throw new Error(
+                    "The training file has no classifier dataset."
+                );
+            }
+        }
+
+
+        async function loadTrainingFile(file) {
+            if (!file) {
+                return;
+            }
+
+            stopPrediction(false);
+
+            try {
+                statusDiv.textContent =
+                    "Loading training data...";
+
+                const jsonText =
+                    await file.text();
+
+                const data =
+                    JSON.parse(jsonText);
+
+                validateTrainingData(data);
+
+                const restoredDataset = {};
+
+                for (
+                    const classId
+                    of Object.keys(data.dataset)
+                ) {
+                    const savedTensor =
+                        data.dataset[classId];
+
+                    if (
+                        !savedTensor ||
+                        !Array.isArray(
+                            savedTensor.shape
+                        ) ||
+                        !Array.isArray(
+                            savedTensor.values
+                        )
+                    ) {
+                        throw new Error(
+                            "Invalid tensor data for item " +
+                            classId +
+                            "."
+                        );
+                    }
+
+                    restoredDataset[classId] =
+                        tf.tensor(
+                            savedTensor.values,
+                            savedTensor.shape,
+                            "float32"
+                        );
+                }
+
+                if (
+                    Object.keys(
+                        restoredDataset
+                    ).length === 0
+                ) {
+                    throw new Error(
+                        "The training file contains no samples."
+                    );
+                }
+
+                /*
+                    Clear the old classifier data before
+                    replacing it with the loaded data.
+                */
+                classifier.clearAllClasses();
+
+                classifier.setClassifierDataset(
+                    restoredDataset
+                );
+
+                clearClassPanels();
+
+                const sortedClasses =
+                    data.classes
+                        .slice()
+                        .sort(function (a, b) {
+                            return (
+                                Number(a.classId) -
+                                Number(b.classId)
+                            );
+                        });
+
+                sortedClasses.forEach(
+                    function (savedClass) {
+                        const classId =
+                            Number(
+                                savedClass.classId
+                            );
+
+                        const datasetEntry =
+                            restoredDataset[
+                                String(classId)
+                            ];
+
+                        let sampleCount =
+                            Number(
+                                savedClass.sampleCount
+                            ) || 0;
+
+                        /*
+                            The first tensor dimension is
+                            normally the number of samples.
+                        */
+                        if (
+                            datasetEntry &&
+                            datasetEntry.shape.length > 0
+                        ) {
+                            sampleCount =
+                                datasetEntry.shape[0];
+                        }
+
+                        createClassPanel(
+                            classId,
+                            savedClass.name ||
+                                getDefaultClassName(
+                                    classId
+                                ),
+                            sampleCount
+                        );
+                    }
+                );
+
+                /*
+                    Handle any dataset class that may be
+                    missing from the class information.
+                */
+                Object.keys(
+                    restoredDataset
+                ).forEach(function (classIdText) {
+                    const classId =
+                        Number(classIdText);
+
+                    if (
+                        !classRecords.has(classId)
+                    ) {
+                        const tensor =
+                            restoredDataset[
+                                classIdText
+                            ];
+
+                        createClassPanel(
+                            classId,
+                            getDefaultClassName(
+                                classId
+                            ),
+                            tensor.shape[0] || 0
+                        );
+                    }
+                });
+
+                ensureEmptyClassExists();
+
+                const savedThreshold =
+                    Number(
+                        data.confidenceThreshold
+                    );
+
+                if (
+                    Number.isFinite(
+                        savedThreshold
+                    )
+                ) {
+                    const safeThreshold =
+                        Math.min(
+                            99,
+                            Math.max(
+                                50,
+                                savedThreshold
+                            )
+                        );
+
+                    thresholdSlider.value =
+                        String(safeThreshold);
+
+                    thresholdValue.textContent =
+                        safeThreshold + "%";
+                }
+
+                enableControls();
+                updateSaveButton();
+
+                statusDiv.textContent =
+                    "Training data loaded. " +
+                    classifier.getNumClasses() +
+                    " trained item class(es) ready.";
+
+                hidePredictionOverlay();
+            } catch (error) {
+                console.error(
+                    "Load training error:",
+                    error
+                );
+
+                statusDiv.textContent =
+                    "Unable to load training data: " +
+                    error.message;
+            } finally {
+                /*
+                    Clear the file selection so that the
+                    same file can be selected again.
+                */
+                trainingFileInput.value = "";
+            }
+        }
+
+
+        // =====================================================
         // RESET
         // =====================================================
 
@@ -1104,21 +1764,12 @@
                 classifier.clearAllClasses();
             }
 
-            classRecords.forEach(function (record) {
-                record.element.remove();
-            });
-
-            classRecords.clear();
-            nextClassId = 0;
-
+            clearClassPanels();
             createClassPanel();
-            enableClassButtons();
 
-            predictionDiv.textContent =
-                "Prediction: Model not ready";
-
-            predictionDiv.style.color =
-                "#4caf50";
+            enableControls();
+            updateSaveButton();
+            hidePredictionOverlay();
 
             statusDiv.textContent =
                 "All training samples cleared.";
@@ -1160,10 +1811,10 @@
 
                 await setupCamera();
 
-                enableClassButtons();
+                enableControls();
 
                 statusDiv.textContent =
-                    "Ready! Name an item and add training samples.";
+                    "Ready! Train a new item or load saved training data.";
             } catch (error) {
                 console.error(
                     "Initialization error:",
@@ -1213,13 +1864,36 @@
         );
 
 
+        saveTrainingButton.addEventListener(
+            "click",
+            saveTrainingData
+        );
+
+
+        loadTrainingButton.addEventListener(
+            "click",
+            function () {
+                trainingFileInput.click();
+            }
+        );
+
+
+        trainingFileInput.addEventListener(
+            "change",
+            function () {
+                const selectedFile =
+                    trainingFileInput.files[0];
+
+                loadTrainingFile(
+                    selectedFile
+                );
+            }
+        );
+
+
         window.addEventListener(
             "load",
             function () {
-                /*
-                    Begin with one item. Another item will
-                    appear after its first sample is added.
-                */
                 createClassPanel();
                 initializeApp();
             }
