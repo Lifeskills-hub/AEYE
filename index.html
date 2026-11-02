@@ -2,54 +2,57 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Custom Named Camera Training</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Custom AI Classifier</title>
     <style>
-        body { font-family: sans-serif; text-align: center; background: #121212; color: #fff; margin: 20px; }
-        video { border: 2px solid #444; border-radius: 8px; max-width: 100%; width: 400px; height: 300px; object-fit: cover; }
-        .controls { margin-top: 15px; }
-        .class-group { margin: 10px 0; }
-        input[type="text"] { padding: 8px; font-size: 14px; border-radius: 4px; border: 1px solid #555; background: #222; color: #fff; margin-right: 5px; width: 140px; }
-        button { padding: 9px 14px; font-size: 14px; cursor: pointer; background: #00bcd4; border: none; border-radius: 4px; font-weight: bold; color: #fff; margin: 3px; }
-        button:hover { background: #008ba3; }
-        #status { font-size: 1.1rem; margin: 15px 0; color: #ff9800; font-weight: bold; padding: 0 10px; }
-        #prediction { font-size: 1.4rem; color: #4CAF50; margin-top: 15px; font-weight: bold; }
-        .action-btns { margin-top: 20px; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; text-align: center; background: #121212; color: #fff; margin: 0; padding: 15px; }
+        h2 { font-size: 1.3rem; margin-bottom: 10px; }
+        .video-container { position: relative; width: 100%; max-width: 400px; margin: 0 auto; }
+        video { width: 100%; max-width: 400px; height: 300px; object-fit: cover; border: 2px solid #444; border-radius: 8px; background: #000; }
+        .controls { margin-top: 15px; max-width: 400px; margin-left: auto; margin-right: auto; }
+        .class-group { background: #1e1e1e; padding: 10px; border-radius: 6px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 8px; }
+        input[type="text"] { padding: 10px; font-size: 16px; border-radius: 4px; border: 1px solid #555; background: #2c2c2c; color: #fff; width: 100%; box-sizing: border-box; }
+        button { padding: 12px; font-size: 15px; cursor: pointer; background: #00bcd4; border: none; border-radius: 4px; font-weight: bold; color: #fff; width: 100%; }
+        button:active { opacity: 0.8; }
+        #status { font-size: 0.95rem; margin: 12px 0; color: #ff9800; font-weight: bold; padding: 0 5px; word-break: break-word; }
+        #prediction { font-size: 1.2rem; color: #4CAF50; margin-top: 15px; font-weight: bold; background: #1e1e1e; padding: 12px; border-radius: 6px; max-width: 400px; margin-left: auto; margin-right: auto; }
+        .action-row { display: flex; gap: 10px; margin-top: 10px; }
     </style>
 
-    <!-- Load TensorFlow.js, MobileNet, and KNN Classifier via reliable CDNs -->
+    <!-- Load TensorFlow.js and Models via secure HTTPS CDNs -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.11.0/dist/tf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.0/dist/mobilenet.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/knn-classifier@1.2.3/dist/knn-classifier.min.js"></script>
 </head>
 <body>
 
-    <h2>Train Custom Named Objects (JS)</h2>
-    <div id="status">Initializing AI Base Model... Please wait.</div>
+    <h2>Custom AI Camera Trainer</h2>
+    <div id="status">Initializing system...</div>
 
-    <div>
+    <div class="video-container">
         <video id="webcam" autoplay playsinline muted></video>
     </div>
 
-    <div style="margin-top: 10px;">
-        <button id="toggle-camera" style="background: #607D8B;">Switch to Rear Camera</button>
-    </div>
-
     <div class="controls">
-        <div class="class-group">
-            <input type="text" id="name-0" value="Coffee Mug">
-            <button id="btn-0" disabled>Add Sample: <span id="label-text-0">Coffee Mug</span></button>
-            <span id="count-0" style="margin-left: 10px; color: #aaa;">(0 samples)</span>
+        <div style="margin-bottom: 12px;">
+            <button id="toggle-camera" style="background: #607D8B;">Switch to Rear Camera</button>
         </div>
 
         <div class="class-group">
-            <input type="text" id="name-1" value="Smartphone">
-            <button id="btn-1" disabled>Add Sample: <span id="label-text-1">Smartphone</span></button>
-            <span id="count-1" style="margin-left: 10px; color: #aaa;">(0 samples)</span>
+            <input type="text" id="name-0" value="Object A">
+            <button id="btn-0" disabled style="background: #008ba3;">Add Sample: <span id="label-text-0">Object A</span></button>
+            <span id="count-0" style="color: #aaa; font-size: 0.9rem;">0 samples</span>
         </div>
 
-        <div class="action-btns">
+        <div class="class-group">
+            <input type="text" id="name-1" value="Object B">
+            <button id="btn-1" disabled style="background: #008ba3;">Add Sample: <span id="label-text-1">Object B</span></button>
+            <span id="count-1" style="color: #aaa; font-size: 0.9rem;">0 samples</span>
+        </div>
+
+        <div class="action-row">
             <button id="train" style="background: #4CAF50;" disabled>Start Predicting</button>
-            <button id="reset" style="background: #f44336;">Reset All</button>
+            <button id="reset" style="background: #f44336;">Reset</button>
         </div>
     </div>
 
@@ -85,7 +88,7 @@
             if (video.srcObject) {
                 video.srcObject.getTracks().forEach(track => track.stop());
             }
-            
+
             const constraints = {
                 video: {
                     facingMode: useRearCamera ? { exact: "environment" } : "user",
@@ -101,12 +104,12 @@
                     video.onloadedmetadata = () => { resolve(video); };
                 });
             } catch (err) {
-                // Fallback if exact environment constraint fails on some mobile devices
+                // Fallback for mobile devices that throw constraint errors on 'exact environment'
                 try {
                     const fallbackStream = await navigator.mediaDevices.getUserMedia({ video: true });
                     video.srcObject = fallbackStream;
                 } catch (fallbackErr) {
-                    statusDiv.innerText = "Error: Camera access denied or not supported.";
+                    statusDiv.innerText = "Camera Error: Please allow permissions in browser settings.";
                     throw fallbackErr;
                 }
             }
@@ -114,29 +117,27 @@
 
         async function init() {
             try {
-                statusDiv.innerText = "Requesting camera access...";
+                statusDiv.innerText = "Requesting camera permissions...";
                 await setupCamera();
 
-                statusDiv.innerText = "Loading MobileNet AI Model (this may take a few seconds)...";
-                
-                // Check if scripts loaded properly
+                statusDiv.innerText = "Loading AI models from CDN...";
+
                 if (typeof tf === 'undefined' || typeof mobilenet === 'undefined' || typeof knnClassifier === 'undefined') {
-                    throw new Error("TensorFlow libraries failed to load from CDN. Check your internet connection or firewall.");
+                    throw new Error("TensorFlow scripts failed to load. Check network/adblockers.");
                 }
 
                 classifier = knnClassifier.create();
                 mobilenetModel = await mobilenet.load();
                 
-                statusDiv.innerText = "Ready! Type your custom names, point your camera, and add samples.";
+                statusDiv.innerText = "Ready! Type names, point camera, and add samples.";
                 
-                // Enable buttons once fully loaded
                 btn0.removeAttribute('disabled');
                 btn1.removeAttribute('disabled');
                 trainBtn.removeAttribute('disabled');
 
             } catch (err) {
                 console.error(err);
-                statusDiv.innerText = "Error during setup: " + err.message;
+                statusDiv.innerText = "Initialization Error: " + err.message;
             }
 
             btn0.addEventListener('click', () => addExample(0));
@@ -158,13 +159,13 @@
             
             sampleCounts[classId]++;
             if (classId === 0) {
-                count0Span.innerText = `(${sampleCounts[0]} samples)`;
+                count0Span.innerText = `${sampleCounts[0]} samples`;
             } else {
-                count1Span.innerText = `(${sampleCounts[1]} samples)`;
+                count1Span.innerText = `${sampleCounts[1]} samples`;
             }
 
             const currentName = classId === 0 ? nameInput0.value : nameInput1.value;
-            statusDiv.innerText = `Added sample for "${currentName}". Total classes ready: ${classifier.getNumClasses()}`;
+            statusDiv.innerText = `Added sample for "${currentName}". Total classes: ${classifier.getNumClasses()}`;
         }
 
         async function startPredicting() {
@@ -186,7 +187,7 @@
             const className = result.label === 0 ? nameInput0.value : nameInput1.value;
             const confidence = Math.round(result.confidences[result.label] * 100);
 
-            predictionDiv.innerText = `Prediction: ${className} (${confidence}% confidence)`;
+            predictionDiv.innerText = `Prediction: ${className} (${confidence}%)`;
 
             requestAnimationFrame(runPredictionLoop);
         }
@@ -195,9 +196,9 @@
             isPredicting = false;
             if (classifier) classifier.clearAllClasses();
             sampleCounts = { 0: 0, 1: 0 };
-            count0Span.innerText = "(0 samples)";
-            count1Span.innerText = "(0 samples)";
-            statusDiv.innerText = "Model cleared. Start fresh by adding samples.";
+            count0Span.innerText = "0 samples";
+            count1Span.innerText = "0 samples";
+            statusDiv.innerText = "Model cleared. Start fresh.";
             predictionDiv.innerText = "Prediction: Model not ready";
         }
 
