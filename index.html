@@ -45,14 +45,18 @@
             word-break: break-word;
         }
 
+        /* ==========================================
+           CAMERA
+        ========================================== */
+
         .video-container {
             position: relative;
             width: 100%;
             margin: 0 auto;
             overflow: hidden;
-            border: 2px solid #444444;
+            border: 2px solid #444;
             border-radius: 8px;
-            background: #000000;
+            background: #000;
         }
 
         video {
@@ -60,8 +64,12 @@
             width: 100%;
             height: 300px;
             object-fit: cover;
-            background: #000000;
+            background: #000;
         }
+
+        /* ==========================================
+           CAMERA PREDICTION OVERLAY
+        ========================================== */
 
         #prediction-overlay {
             display: none;
@@ -71,146 +79,47 @@
             bottom: 12px;
             padding: 12px 14px;
             border-radius: 8px;
-            color: #ffffff;
-            background: rgba(0, 0, 0, 0.72);
-            border: 2px solid #4caf50;
+            color: white;
+            background: rgba(0, 0, 0, 0.75);
             font-size: 1.2rem;
             font-weight: bold;
-            line-height: 1.3;
-            word-break: break-word;
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
             pointer-events: none;
         }
 
         #prediction-overlay.recognized {
             display: block;
-            color: #ffffff;
-            border-color: #4caf50;
-            background: rgba(20, 90, 25, 0.78);
+            border: 2px solid #4caf50;
+            background: rgba(20, 90, 25, 0.82);
         }
 
         #prediction-overlay.unrecognized {
             display: block;
-            color: #ffffff;
-            border-color: #ff9800;
-            background: rgba(125, 70, 0, 0.82);
+            border: 2px solid #ff9800;
+            background: rgba(125, 65, 0, 0.85);
         }
 
         .overlay-name {
             display: block;
-            font-size: 1.25rem;
+            font-size: 1.3rem;
         }
 
         .overlay-confidence {
             display: block;
-            font-size: 0.85rem;
             margin-top: 3px;
+            font-size: 0.85rem;
             opacity: 0.9;
         }
 
-        .controls {
-            margin-top: 15px;
-        }
-
-        .settings-box {
-            background: #1e1e1e;
-            padding: 12px;
-            border-radius: 7px;
-            margin: 12px 0;
-            text-align: left;
-        }
-
-        .settings-title {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
-
-        .threshold-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        #threshold {
-            flex: 1;
-        }
-
-        #threshold-value {
-            color: #00bcd4;
-            font-weight: bold;
-            min-width: 45px;
-            text-align: right;
-        }
-
-        .threshold-note {
-            color: #aaaaaa;
-            font-size: 0.82rem;
-            line-height: 1.4;
-            margin-top: 8px;
-        }
-
-        #classes-container {
-            margin-top: 12px;
-        }
-
-        .class-group {
-            background: #1e1e1e;
-            padding: 11px;
-            border-radius: 7px;
-            margin-bottom: 10px;
-        }
-
-        .class-heading {
-            color: #bbbbbb;
-            font-size: 0.82rem;
-            text-align: left;
-            margin-bottom: 7px;
-        }
-
-        .class-name {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            color: #ffffff;
-            background: #2c2c2c;
-            border: 1px solid #555555;
-            border-radius: 4px;
-        }
-
-        .sample-button {
-            background: #008ba3;
-            margin-top: 8px;
-        }
-
-        .class-footer {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            margin-top: 8px;
-        }
-
-        .sample-count {
-            color: #aaaaaa;
-            font-size: 0.88rem;
-            text-align: left;
-        }
-
-        .remove-button {
-            width: auto;
-            padding: 7px 10px;
-            background: #6d4c41;
-            font-size: 0.82rem;
-        }
+        /* ==========================================
+           BUTTONS
+        ========================================== */
 
         button {
             width: 100%;
             padding: 12px;
-            color: #ffffff;
+            color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 5px;
             font-size: 15px;
             font-weight: bold;
             cursor: pointer;
@@ -227,13 +136,78 @@
         }
 
         .camera-button {
+            margin-top: 12px;
             background: #607d8b;
         }
 
-        .add-class-button {
-            background: #6a1b9a;
-            margin-top: 2px;
+        /* ==========================================
+           CURRENT ITEM
+        ========================================== */
+
+        .current-title {
+            color: #00bcd4;
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-align: left;
+            margin: 15px 2px 7px;
         }
+
+        .class-group {
+            background: #1e1e1e;
+            padding: 11px;
+            border-radius: 7px;
+            margin-bottom: 10px;
+        }
+
+        .current-item {
+            border: 2px solid #008ba3;
+        }
+
+        .class-heading {
+            color: #aaa;
+            font-size: 0.82rem;
+            text-align: left;
+            margin-bottom: 7px;
+        }
+
+        .class-name {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            color: white;
+            background: #2c2c2c;
+            border: 1px solid #555;
+            border-radius: 4px;
+        }
+
+        .sample-button {
+            background: #008ba3;
+            margin-top: 8px;
+        }
+
+        .class-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .sample-count {
+            color: #aaa;
+            font-size: 0.88rem;
+        }
+
+        .remove-button {
+            width: auto;
+            padding: 7px 10px;
+            background: #6d4c41;
+            font-size: 0.82rem;
+        }
+
+        /* ==========================================
+           PREDICTION CONTROLS
+        ========================================== */
 
         .action-row {
             display: flex;
@@ -249,10 +223,81 @@
             background: #f44336;
         }
 
+        /* ==========================================
+           THRESHOLD
+        ========================================== */
+
+        .settings-box {
+            background: #1e1e1e;
+            padding: 12px;
+            border-radius: 7px;
+            margin: 12px 0;
+            text-align: left;
+        }
+
+        .settings-title {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .threshold-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #threshold {
+            flex: 1;
+        }
+
+        #threshold-value {
+            min-width: 45px;
+            text-align: right;
+            color: #00bcd4;
+            font-weight: bold;
+        }
+
+        .threshold-note {
+            color: #aaa;
+            font-size: 0.8rem;
+            line-height: 1.4;
+            margin-top: 7px;
+        }
+
+        /* ==========================================
+           TRAINED ITEMS
+        ========================================== */
+
+        #trained-section {
+            margin-top: 15px;
+        }
+
+        #trained-toggle {
+            background: #37474f;
+            text-align: left;
+        }
+
+        #trained-list {
+            margin-top: 8px;
+        }
+
+        .trained-hidden {
+            display: none;
+        }
+
+        .trained-item {
+            border-left: 4px solid #4caf50;
+        }
+
+        /* ==========================================
+           SAVE / LOAD
+        ========================================== */
+
         .data-row {
             display: flex;
             gap: 10px;
-            margin-top: 10px;
+            margin-top: 12px;
         }
 
         #save-training {
@@ -268,13 +313,14 @@
         }
 
         .small-note {
-            color: #999999;
+            color: #999;
             font-size: 0.8rem;
             line-height: 1.4;
             margin: 10px 4px 0;
         }
 
         @media (max-width: 380px) {
+
             video {
                 height: 260px;
             }
@@ -284,7 +330,9 @@
                 flex-direction: column;
             }
         }
+
     </style>
+
 
     <!-- TensorFlow.js -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js"></script>
@@ -294,1624 +342,2468 @@
 
     <!-- KNN Classifier -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/knn-classifier@1.2.6/dist/knn-classifier.min.js"></script>
+
 </head>
 
 <body>
 
-    <div class="container">
+<div class="container">
 
-        <h2>Custom AI Camera Trainer</h2>
+    <h2>Custom AI Camera Trainer</h2>
 
-        <div id="status">
-            Initializing system...
-        </div>
+    <div id="status">
+        Initializing system...
+    </div>
 
-        <div class="video-container">
 
-            <video
-                id="webcam"
-                autoplay
-                playsinline
-                muted
-            ></video>
+    <!-- ==========================================
+         CAMERA
+    =========================================== -->
 
-            <div
-                id="prediction-overlay"
-                role="status"
-                aria-live="polite"
+    <div class="video-container">
+
+        <video
+            id="webcam"
+            autoplay
+            playsinline
+            muted
+        ></video>
+
+
+        <!-- Prediction appears over the video -->
+
+        <div
+            id="prediction-overlay"
+            role="status"
+            aria-live="polite"
+        >
+
+            <span
+                id="overlay-name"
+                class="overlay-name"
             >
-                <span
-                    id="overlay-name"
-                    class="overlay-name"
-                >
-                    Waiting for prediction
-                </span>
+                Waiting
+            </span>
 
-                <span
-                    id="overlay-confidence"
-                    class="overlay-confidence"
-                ></span>
-            </div>
-
-        </div>
-
-        <div class="controls">
-
-            <button
-                id="toggle-camera"
-                class="camera-button"
-                type="button"
-            >
-                Switch to Rear Camera
-            </button>
-
-            <div class="settings-box">
-
-                <label
-                    class="settings-title"
-                    for="threshold"
-                >
-                    Recognition Threshold
-                </label>
-
-                <div class="threshold-row">
-
-                    <input
-                        id="threshold"
-                        type="range"
-                        min="50"
-                        max="99"
-                        value="75"
-                        step="1"
-                    >
-
-                    <span id="threshold-value">
-                        75%
-                    </span>
-
-                </div>
-
-                <div class="threshold-note">
-                    Predictions below this confidence level will display
-                    “Unrecognized Item”.
-                </div>
-
-            </div>
-
-            <div id="classes-container"></div>
-
-            <button
-                id="add-class"
-                class="add-class-button"
-                type="button"
-            >
-                + Add Another Item
-            </button>
-
-            <div class="action-row">
-
-                <button
-                    id="predict"
-                    type="button"
-                    disabled
-                >
-                    Start Predicting
-                </button>
-
-                <button
-                    id="reset"
-                    type="button"
-                >
-                    Reset All
-                </button>
-
-            </div>
-
-            <div class="data-row">
-
-                <button
-                    id="save-training"
-                    type="button"
-                    disabled
-                >
-                    Save Training Data
-                </button>
-
-                <button
-                    id="load-training"
-                    type="button"
-                    disabled
-                >
-                    Load Training Data
-                </button>
-
-            </div>
-
-            <input
-                id="training-file"
-                type="file"
-                accept=".json,application/json"
-            >
-
-            <div class="small-note">
-                Save Training Data downloads a JSON file containing the
-                trained feature vectors, item names and threshold. It does
-                not save or upload camera photos.
-            </div>
+            <span
+                id="overlay-confidence"
+                class="overlay-confidence"
+            ></span>
 
         </div>
 
     </div>
 
 
-    <script>
-        "use strict";
-
-        // =====================================================
-        // PAGE ELEMENTS
-        // =====================================================
-
-        const video =
-            document.getElementById("webcam");
-
-        const statusDiv =
-            document.getElementById("status");
-
-        const predictionOverlay =
-            document.getElementById("prediction-overlay");
-
-        const overlayName =
-            document.getElementById("overlay-name");
-
-        const overlayConfidence =
-            document.getElementById("overlay-confidence");
-
-        const classesContainer =
-            document.getElementById("classes-container");
-
-        const toggleCameraButton =
-            document.getElementById("toggle-camera");
-
-        const addClassButton =
-            document.getElementById("add-class");
-
-        const predictButton =
-            document.getElementById("predict");
-
-        const resetButton =
-            document.getElementById("reset");
-
-        const saveTrainingButton =
-            document.getElementById("save-training");
-
-        const loadTrainingButton =
-            document.getElementById("load-training");
-
-        const trainingFileInput =
-            document.getElementById("training-file");
-
-        const thresholdSlider =
-            document.getElementById("threshold");
-
-        const thresholdValue =
-            document.getElementById("threshold-value");
+    <button
+        id="toggle-camera"
+        class="camera-button"
+        type="button"
+    >
+        Switch to Rear Camera
+    </button>
 
 
-        // =====================================================
-        // APPLICATION STATE
-        // =====================================================
+    <!-- ==========================================
+         CURRENT ITEM
 
-        let classifier = null;
-        let mobilenetModel = null;
+         Only ONE new item stays here.
+    =========================================== -->
 
-        let useRearCamera = false;
-        let isPredicting = false;
-        let predictionFrame = null;
+    <div class="current-title">
+        CURRENT ITEM
+    </div>
 
-        let nextClassId = 0;
-
-        const classRecords = new Map();
+    <div id="current-class-container"></div>
 
 
-        // =====================================================
-        // THRESHOLD
-        // =====================================================
+    <!-- ==========================================
+         PREDICTION CONTROLS
+    =========================================== -->
 
-        function getConfidenceThreshold() {
-            return Number(thresholdSlider.value) / 100;
-        }
+    <div class="action-row">
+
+        <button
+            id="predict"
+            type="button"
+            disabled
+        >
+            Start Predicting
+        </button>
+
+        <button
+            id="reset"
+            type="button"
+        >
+            Reset All
+        </button>
+
+    </div>
 
 
-        thresholdSlider.addEventListener(
-            "input",
-            function () {
-                thresholdValue.textContent =
-                    thresholdSlider.value + "%";
+    <!-- ==========================================
+         CONFIDENCE THRESHOLD
+    =========================================== -->
+
+    <div class="settings-box">
+
+        <label
+            class="settings-title"
+            for="threshold"
+        >
+            Recognition Threshold
+        </label>
+
+        <div class="threshold-row">
+
+            <input
+                id="threshold"
+                type="range"
+                min="50"
+                max="99"
+                value="75"
+                step="1"
+            >
+
+            <span id="threshold-value">
+                75%
+            </span>
+
+        </div>
+
+        <div class="threshold-note">
+            Predictions below this level will display
+            “Unrecognized Item”.
+        </div>
+
+    </div>
+
+
+    <!-- ==========================================
+         PREVIOUSLY TRAINED ITEMS
+    =========================================== -->
+
+    <div
+        id="trained-section"
+        style="display:none;"
+    >
+
+        <button
+            id="trained-toggle"
+            type="button"
+        >
+            ▼ Previously Trained Items (0)
+        </button>
+
+        <div
+            id="trained-list"
+            class="trained-hidden"
+        ></div>
+
+    </div>
+
+
+    <!-- ==========================================
+         SAVE / LOAD
+    =========================================== -->
+
+    <div class="data-row">
+
+        <button
+            id="save-training"
+            type="button"
+            disabled
+        >
+            Save Training Data
+        </button>
+
+        <button
+            id="load-training"
+            type="button"
+            disabled
+        >
+            Load Training Data
+        </button>
+
+    </div>
+
+
+    <input
+        id="training-file"
+        type="file"
+        accept=".json,application/json"
+    >
+
+
+    <div class="small-note">
+        Training files contain MobileNet feature data,
+        item names and settings. Camera photographs are
+        not saved.
+    </div>
+
+</div>
+
+
+<script>
+"use strict";
+
+
+// ========================================================
+// ELEMENTS
+// ========================================================
+
+const video =
+    document.getElementById("webcam");
+
+const statusDiv =
+    document.getElementById("status");
+
+const predictionOverlay =
+    document.getElementById("prediction-overlay");
+
+const overlayName =
+    document.getElementById("overlay-name");
+
+const overlayConfidence =
+    document.getElementById("overlay-confidence");
+
+const currentClassContainer =
+    document.getElementById("current-class-container");
+
+const trainedSection =
+    document.getElementById("trained-section");
+
+const trainedList =
+    document.getElementById("trained-list");
+
+const trainedToggle =
+    document.getElementById("trained-toggle");
+
+const toggleCameraButton =
+    document.getElementById("toggle-camera");
+
+const predictButton =
+    document.getElementById("predict");
+
+const resetButton =
+    document.getElementById("reset");
+
+const saveTrainingButton =
+    document.getElementById("save-training");
+
+const loadTrainingButton =
+    document.getElementById("load-training");
+
+const trainingFileInput =
+    document.getElementById("training-file");
+
+const thresholdSlider =
+    document.getElementById("threshold");
+
+const thresholdValue =
+    document.getElementById("threshold-value");
+
+
+// ========================================================
+// APPLICATION STATE
+// ========================================================
+
+let classifier = null;
+let mobilenetModel = null;
+
+let useRearCamera = false;
+
+let isPredicting = false;
+
+let predictionFrame = null;
+
+let nextClassId = 0;
+
+let currentClassId = null;
+
+const classRecords =
+    new Map();
+
+
+// ========================================================
+// THRESHOLD
+// ========================================================
+
+function getConfidenceThreshold() {
+
+    return Number(
+        thresholdSlider.value
+    ) / 100;
+
+}
+
+
+thresholdSlider.addEventListener(
+    "input",
+    function () {
+
+        thresholdValue.textContent =
+            thresholdSlider.value + "%";
+
+    }
+);
+
+
+// ========================================================
+// LIBRARY CHECK
+// ========================================================
+
+function checkLibraries() {
+
+    if (typeof tf === "undefined") {
+
+        throw new Error(
+            "TensorFlow.js failed to load."
+        );
+
+    }
+
+
+    if (typeof mobilenet === "undefined") {
+
+        throw new Error(
+            "MobileNet failed to load."
+        );
+
+    }
+
+
+    if (typeof knnClassifier === "undefined") {
+
+        throw new Error(
+            "KNN Classifier failed to load."
+        );
+
+    }
+
+
+    console.log(
+        "TensorFlow.js:",
+        tf.version.tfjs
+    );
+
+}
+
+
+// ========================================================
+// CAMERA
+// ========================================================
+
+function stopCurrentCamera() {
+
+    if (!video.srcObject) {
+        return;
+    }
+
+
+    video.srcObject
+        .getTracks()
+        .forEach(
+            function (track) {
+
+                track.stop();
+
             }
         );
 
 
-        // =====================================================
-        // LIBRARY CHECK
-        // =====================================================
+    video.srcObject = null;
 
-        function checkLibraries() {
-            if (typeof tf === "undefined") {
-                throw new Error(
-                    "TensorFlow.js failed to load."
-                );
-            }
+}
 
-            if (typeof mobilenet === "undefined") {
-                throw new Error(
-                    "MobileNet failed to load."
-                );
-            }
 
-            if (typeof knnClassifier === "undefined") {
-                throw new Error(
-                    "KNN Classifier failed to load."
-                );
-            }
+async function attachCameraStream(stream) {
 
-            console.log(
-                "TensorFlow.js version:",
-                tf.version.tfjs
-            );
+    video.srcObject =
+        stream;
+
+
+    await new Promise(
+        function (resolve) {
+
+            video.onloadedmetadata =
+                function () {
+
+                    resolve();
+
+                };
+
         }
+    );
 
 
-        // =====================================================
-        // CAMERA
-        // =====================================================
+    await video.play();
 
-        function stopCurrentCamera() {
-            if (!video.srcObject) {
-                return;
+}
+
+
+async function setupCamera() {
+
+    stopCurrentCamera();
+
+
+    const constraints = {
+
+        video: {
+
+            facingMode:
+                useRearCamera
+                    ? { ideal: "environment" }
+                    : { ideal: "user" },
+
+            width: {
+                ideal: 640
+            },
+
+            height: {
+                ideal: 480
             }
 
-            video.srcObject
-                .getTracks()
-                .forEach(function (track) {
-                    track.stop();
+        },
+
+        audio: false
+
+    };
+
+
+    try {
+
+        const stream =
+            await navigator.mediaDevices
+                .getUserMedia(
+                    constraints
+                );
+
+
+        await attachCameraStream(
+            stream
+        );
+
+    }
+
+    catch (preferredError) {
+
+        console.warn(
+            "Preferred camera failed:",
+            preferredError
+        );
+
+
+        const fallbackStream =
+            await navigator.mediaDevices
+                .getUserMedia({
+                    video: true,
+                    audio: false
                 });
 
-            video.srcObject = null;
-        }
+
+        await attachCameraStream(
+            fallbackStream
+        );
+
+    }
+
+}
 
 
-        async function attachCameraStream(stream) {
-            video.srcObject = stream;
+async function switchCamera() {
 
-            await new Promise(function (resolve) {
-                video.onloadedmetadata = function () {
-                    resolve();
-                };
-            });
-
-            await video.play();
-        }
+    const shouldResume =
+        isPredicting;
 
 
-        async function setupCamera() {
-            stopCurrentCamera();
-
-            const preferredConstraints = {
-                video: {
-                    facingMode: useRearCamera
-                        ? { ideal: "environment" }
-                        : { ideal: "user" },
-
-                    width: {
-                        ideal: 640
-                    },
-
-                    height: {
-                        ideal: 480
-                    }
-                },
-
-                audio: false
-            };
-
-            try {
-                const stream =
-                    await navigator.mediaDevices.getUserMedia(
-                        preferredConstraints
-                    );
-
-                await attachCameraStream(stream);
-            } catch (preferredError) {
-                console.warn(
-                    "Preferred camera failed:",
-                    preferredError
-                );
-
-                const fallbackStream =
-                    await navigator.mediaDevices.getUserMedia({
-                        video: true,
-                        audio: false
-                    });
-
-                await attachCameraStream(
-                    fallbackStream
-                );
-            }
-        }
+    stopPrediction(false);
 
 
-        async function switchCamera() {
-            const wasPredicting = isPredicting;
-
-            stopPrediction(false);
-
-            useRearCamera = !useRearCamera;
-
-            toggleCameraButton.textContent =
-                useRearCamera
-                    ? "Switch to Front Camera"
-                    : "Switch to Rear Camera";
-
-            try {
-                statusDiv.textContent =
-                    "Switching camera...";
-
-                await setupCamera();
-
-                statusDiv.textContent =
-                    (useRearCamera ? "Rear" : "Front") +
-                    " camera active. AI ready.";
-
-                if (
-                    wasPredicting &&
-                    classifier &&
-                    classifier.getNumClasses() > 0
-                ) {
-                    startPrediction();
-                }
-            } catch (error) {
-                console.error(
-                    "Camera switching error:",
-                    error
-                );
-
-                statusDiv.textContent =
-                    "Camera Error: " +
-                    error.message;
-            }
-        }
+    useRearCamera =
+        !useRearCamera;
 
 
-        // =====================================================
-        // DYNAMIC ITEM CLASSES
-        // =====================================================
-
-        function getDefaultClassName(classId) {
-            return "Item " + (classId + 1);
-        }
+    toggleCameraButton.textContent =
+        useRearCamera
+            ? "Switch to Front Camera"
+            : "Switch to Rear Camera";
 
 
-        function getClassName(classId) {
-            const record =
-                classRecords.get(classId);
+    try {
 
-            if (!record) {
-                return "Unknown Item";
-            }
-
-            return (
-                record.input.value.trim() ||
-                getDefaultClassName(classId)
-            );
-        }
+        statusDiv.textContent =
+            "Switching camera...";
 
 
-        function formatSampleCount(count) {
-            return (
-                count +
-                (count === 1 ? " sample" : " samples")
-            );
-        }
+        await setupCamera();
 
 
-        function createClassPanel(
-            requestedClassId = null,
-            requestedName = null,
-            requestedCount = 0
+        statusDiv.textContent =
+            (useRearCamera ? "Rear" : "Front") +
+            " camera active.";
+
+
+        if (
+            shouldResume &&
+            classifier &&
+            classifier.getNumClasses() > 0
         ) {
-            let classId;
 
-            if (
-                requestedClassId !== null &&
-                Number.isInteger(Number(requestedClassId))
-            ) {
-                classId =
-                    Number(requestedClassId);
+            startPrediction();
 
-                nextClassId =
-                    Math.max(
-                        nextClassId,
-                        classId + 1
-                    );
-            } else {
-                classId = nextClassId;
-                nextClassId++;
-            }
+        }
 
-            const panel =
-                document.createElement("div");
+    }
 
-            panel.className = "class-group";
-            panel.dataset.classId = String(classId);
+    catch (error) {
+
+        console.error(error);
 
 
-            const heading =
-                document.createElement("div");
+        statusDiv.textContent =
+            "Camera Error: " +
+            error.message;
 
-            heading.className = "class-heading";
-            heading.textContent =
-                "Training item " + (classId + 1);
+    }
+
+}
 
 
-            const input =
-                document.createElement("input");
+// ========================================================
+// CLASS UTILITIES
+// ========================================================
 
-            input.type = "text";
-            input.className = "class-name";
-            input.value =
-                requestedName ||
-                getDefaultClassName(classId);
+function getDefaultClassName(classId) {
 
-            input.placeholder = "Enter item name";
+    return "Item " +
+        (classId + 1);
 
-            input.setAttribute(
-                "aria-label",
-                "Name for item " + (classId + 1)
+}
+
+
+function getClassName(classId) {
+
+    const record =
+        classRecords.get(
+            classId
+        );
+
+
+    if (!record) {
+
+        return "Unknown Item";
+
+    }
+
+
+    return (
+        record.input.value.trim() ||
+        getDefaultClassName(
+            classId
+        )
+    );
+
+}
+
+
+function formatSampleCount(count) {
+
+    return (
+        count +
+        (
+            count === 1
+                ? " sample"
+                : " samples"
+        )
+    );
+
+}
+
+
+// ========================================================
+// CREATE ITEM PANEL
+// ========================================================
+
+function createClassPanel(
+    requestedClassId = null,
+    requestedName = null,
+    requestedCount = 0,
+    makeCurrent = true
+) {
+
+    let classId;
+
+
+    if (
+        requestedClassId !== null &&
+        Number.isInteger(
+            Number(requestedClassId)
+        )
+    ) {
+
+        classId =
+            Number(
+                requestedClassId
             );
 
 
-            const sampleButton =
-                document.createElement("button");
+        nextClassId =
+            Math.max(
+                nextClassId,
+                classId + 1
+            );
 
-            sampleButton.type = "button";
-            sampleButton.className = "sample-button";
+    }
 
-            sampleButton.disabled =
-                !mobilenetModel || !classifier;
+    else {
+
+        classId =
+            nextClassId;
+
+        nextClassId++;
+
+    }
 
 
-            const buttonLabel =
-                document.createElement("span");
+    const panel =
+        document.createElement(
+            "div"
+        );
+
+
+    panel.className =
+        "class-group";
+
+
+    panel.dataset.classId =
+        String(classId);
+
+
+    const heading =
+        document.createElement(
+            "div"
+        );
+
+
+    heading.className =
+        "class-heading";
+
+
+    heading.textContent =
+        makeCurrent
+            ? "New item"
+            : "Trained item";
+
+
+    const input =
+        document.createElement(
+            "input"
+        );
+
+
+    input.type =
+        "text";
+
+
+    input.className =
+        "class-name";
+
+
+    input.value =
+        requestedName ||
+        getDefaultClassName(
+            classId
+        );
+
+
+    input.placeholder =
+        "Enter item name";
+
+
+    const sampleButton =
+        document.createElement(
+            "button"
+        );
+
+
+    sampleButton.type =
+        "button";
+
+
+    sampleButton.className =
+        "sample-button";
+
+
+    sampleButton.disabled =
+        !classifier ||
+        !mobilenetModel;
+
+
+    const buttonLabel =
+        document.createElement(
+            "span"
+        );
+
+
+    buttonLabel.textContent =
+        input.value;
+
+
+    sampleButton.append(
+        document.createTextNode(
+            "Add Sample: "
+        ),
+        buttonLabel
+    );
+
+
+    const footer =
+        document.createElement(
+            "div"
+        );
+
+
+    footer.className =
+        "class-footer";
+
+
+    const countElement =
+        document.createElement(
+            "span"
+        );
+
+
+    countElement.className =
+        "sample-count";
+
+
+    countElement.textContent =
+        formatSampleCount(
+            Number(
+                requestedCount
+            ) || 0
+        );
+
+
+    const removeButton =
+        document.createElement(
+            "button"
+        );
+
+
+    removeButton.type =
+        "button";
+
+
+    removeButton.className =
+        "remove-button";
+
+
+    removeButton.textContent =
+        "Remove";
+
+
+    footer.append(
+        countElement,
+        removeButton
+    );
+
+
+    panel.append(
+        heading,
+        input,
+        sampleButton,
+        footer
+    );
+
+
+    if (makeCurrent) {
+
+        /*
+            Only one current item should
+            occupy this area.
+        */
+
+        currentClassContainer.innerHTML =
+            "";
+
+
+        panel.classList.add(
+            "current-item"
+        );
+
+
+        currentClassContainer.appendChild(
+            panel
+        );
+
+
+        currentClassId =
+            classId;
+
+    }
+
+    else {
+
+        panel.classList.add(
+            "trained-item"
+        );
+
+
+        trainedList.prepend(
+            panel
+        );
+
+    }
+
+
+    const record = {
+
+        classId:
+            classId,
+
+        element:
+            panel,
+
+        heading:
+            heading,
+
+        input:
+            input,
+
+        button:
+            sampleButton,
+
+        buttonLabel:
+            buttonLabel,
+
+        countElement:
+            countElement,
+
+        sampleCount:
+            Number(
+                requestedCount
+            ) || 0,
+
+        isCurrent:
+            makeCurrent
+
+    };
+
+
+    classRecords.set(
+        classId,
+        record
+    );
+
+
+    input.addEventListener(
+        "input",
+        function () {
 
             buttonLabel.textContent =
-                input.value;
-
-
-            sampleButton.append(
-                document.createTextNode(
-                    "Add Sample: "
-                ),
-                buttonLabel
-            );
-
-
-            const footer =
-                document.createElement("div");
-
-            footer.className = "class-footer";
-
-
-            const countElement =
-                document.createElement("span");
-
-            countElement.className =
-                "sample-count";
-
-            countElement.textContent =
-                formatSampleCount(
-                    Number(requestedCount) || 0
-                );
-
-
-            const removeButton =
-                document.createElement("button");
-
-            removeButton.type = "button";
-            removeButton.className =
-                "remove-button";
-
-            removeButton.textContent =
-                "Remove";
-
-
-            footer.append(
-                countElement,
-                removeButton
-            );
-
-
-            panel.append(
-                heading,
-                input,
-                sampleButton,
-                footer
-            );
-
-
-            classesContainer.appendChild(
-                panel
-            );
-
-
-            const record = {
-                classId: classId,
-                element: panel,
-                input: input,
-                button: sampleButton,
-                buttonLabel: buttonLabel,
-                countElement: countElement,
-                sampleCount:
-                    Number(requestedCount) || 0
-            };
-
-
-            classRecords.set(
-                classId,
-                record
-            );
-
-
-            input.addEventListener(
-                "input",
-                function () {
-                    buttonLabel.textContent =
-                        input.value.trim() ||
-                        getDefaultClassName(
-                            classId
-                        );
-                }
-            );
-
-
-            sampleButton.addEventListener(
-                "click",
-                function () {
-                    addExample(classId);
-                }
-            );
-
-
-            removeButton.addEventListener(
-                "click",
-                function () {
-                    removeClass(classId);
-                }
-            );
-
-
-            return record;
-        }
-
-
-        function enableControls() {
-            const ready =
-                Boolean(
-                    mobilenetModel &&
-                    classifier
-                );
-
-            classRecords.forEach(
-                function (record) {
-                    record.button.disabled =
-                        !ready;
-                }
-            );
-
-            predictButton.disabled =
-                !ready;
-
-            loadTrainingButton.disabled =
-                !ready;
-
-            updateSaveButton();
-        }
-
-
-        function updateSaveButton() {
-            const canSave =
-                Boolean(
-                    classifier &&
-                    classifier.getNumClasses() > 0
-                );
-
-            saveTrainingButton.disabled =
-                !canSave;
-        }
-
-
-        function ensureEmptyClassExists() {
-            const hasEmptyClass =
-                Array.from(
-                    classRecords.values()
-                ).some(function (record) {
-                    return record.sampleCount === 0;
-                });
-
-            if (!hasEmptyClass) {
-                createClassPanel();
-            }
-        }
-
-
-        function addEmptyClassIfNeeded(classId) {
-            const record =
-                classRecords.get(classId);
-
-            if (
-                !record ||
-                record.sampleCount !== 1
-            ) {
-                return;
-            }
-
-            const records =
-                Array.from(
-                    classRecords.values()
-                );
-
-            const lastRecord =
-                records[records.length - 1];
-
-            if (
-                lastRecord &&
-                lastRecord.classId === classId
-            ) {
-                createClassPanel();
-
-                statusDiv.textContent =
-                    'First sample added for "' +
-                    getClassName(classId) +
-                    '". A new item has been created below.';
-            }
-        }
-
-
-        function removeClass(classId) {
-            const record =
-                classRecords.get(classId);
-
-            if (!record) {
-                return;
-            }
-
-            stopPrediction(false);
-
-            try {
-                if (
-                    classifier &&
-                    record.sampleCount > 0
-                ) {
-                    classifier.clearClass(
-                        classId
-                    );
-                }
-            } catch (error) {
-                console.warn(
-                    "Unable to clear class:",
-                    error
-                );
-            }
-
-            record.element.remove();
-            classRecords.delete(classId);
-
-            if (classRecords.size === 0) {
-                createClassPanel();
-            }
-
-            ensureEmptyClassExists();
-            updateSaveButton();
-
-            hidePredictionOverlay();
-
-            statusDiv.textContent =
-                "Item removed.";
-        }
-
-
-        function clearClassPanels() {
-            classRecords.forEach(
-                function (record) {
-                    record.element.remove();
-                }
-            );
-
-            classRecords.clear();
-            nextClassId = 0;
-        }
-
-
-        // =====================================================
-        // ADD TRAINING SAMPLE
-        // =====================================================
-
-        function addExample(classId) {
-            const record =
-                classRecords.get(classId);
-
-            if (!record) {
-                return;
-            }
-
-            if (
-                !mobilenetModel ||
-                !classifier
-            ) {
-                statusDiv.textContent =
-                    "AI model is not ready.";
-
-                return;
-            }
-
-            if (video.readyState < 2) {
-                statusDiv.textContent =
-                    "Camera is not ready yet.";
-
-                return;
-            }
-
-            let activation = null;
-
-            try {
-                activation =
-                    mobilenetModel.infer(
-                        video,
-                        "conv_preds"
-                    );
-
-                classifier.addExample(
-                    activation,
+                input.value.trim() ||
+                getDefaultClassName(
                     classId
                 );
 
-                record.sampleCount++;
-
-                record.countElement.textContent =
-                    formatSampleCount(
-                        record.sampleCount
-                    );
-
-                statusDiv.textContent =
-                    'Added sample for "' +
-                    getClassName(classId) +
-                    '". Total: ' +
-                    record.sampleCount +
-                    ".";
-
-                addEmptyClassIfNeeded(
-                    classId
-                );
-
-                updateSaveButton();
-            } catch (error) {
-                console.error(
-                    "Add sample error:",
-                    error
-                );
-
-                statusDiv.textContent =
-                    "Unable to add sample: " +
-                    error.message;
-            } finally {
-                /*
-                    addExample stores its own tensor data
-                    inside the KNN dataset.
-                */
-                if (activation) {
-                    activation.dispose();
-                }
-            }
         }
+    );
 
 
-        // =====================================================
-        // PREDICTION OVERLAY
-        // =====================================================
+    sampleButton.addEventListener(
+        "click",
+        function () {
 
-        function showRecognizedOverlay(
-            itemName,
-            confidencePercent
+            addExample(
+                classId
+            );
+
+        }
+    );
+
+
+    removeButton.addEventListener(
+        "click",
+        function () {
+
+            removeClass(
+                classId
+            );
+
+        }
+    );
+
+
+    updateTrainedSection();
+
+
+    return record;
+
+}
+
+
+// ========================================================
+// MOVE CURRENT ITEM TO TRAINED LIST
+// ========================================================
+
+function moveCurrentItemToTrained(
+    classId
+) {
+
+    const record =
+        classRecords.get(
+            classId
+        );
+
+
+    if (!record) {
+        return;
+    }
+
+
+    record.isCurrent =
+        false;
+
+
+    record.heading.textContent =
+        "Trained item";
+
+
+    record.element.classList.remove(
+        "current-item"
+    );
+
+
+    record.element.classList.add(
+        "trained-item"
+    );
+
+
+    /*
+        Most recently trained item
+        appears at top of trained list.
+    */
+
+    trainedList.prepend(
+        record.element
+    );
+
+
+    currentClassId =
+        null;
+
+
+    updateTrainedSection();
+
+}
+
+
+// ========================================================
+// TRAINED SECTION
+// ========================================================
+
+function getTrainedCount() {
+
+    let total = 0;
+
+
+    classRecords.forEach(
+        function (record) {
+
+            if (
+                !record.isCurrent &&
+                record.sampleCount > 0
+            ) {
+
+                total++;
+
+            }
+
+        }
+    );
+
+
+    return total;
+
+}
+
+
+function updateTrainedSection() {
+
+    const count =
+        getTrainedCount();
+
+
+    trainedToggle.textContent =
+        (
+            trainedList.classList.contains(
+                "trained-hidden"
+            )
+                ? "▼ "
+                : "▲ "
+        ) +
+        "Previously Trained Items (" +
+        count +
+        ")";
+
+
+    trainedSection.style.display =
+        count > 0
+            ? "block"
+            : "none";
+
+}
+
+
+// ========================================================
+// ADD EXAMPLE
+// ========================================================
+
+function addExample(classId) {
+
+    const record =
+        classRecords.get(
+            classId
+        );
+
+
+    if (!record) {
+        return;
+    }
+
+
+    if (
+        !mobilenetModel ||
+        !classifier
+    ) {
+
+        statusDiv.textContent =
+            "AI model is not ready.";
+
+        return;
+
+    }
+
+
+    if (
+        video.readyState < 2
+    ) {
+
+        statusDiv.textContent =
+            "Camera is not ready.";
+
+        return;
+
+    }
+
+
+    let activation = null;
+
+
+    try {
+
+        activation =
+            mobilenetModel.infer(
+                video,
+                "conv_preds"
+            );
+
+
+        classifier.addExample(
+            activation,
+            classId
+        );
+
+
+        record.sampleCount++;
+
+
+        record.countElement.textContent =
+            formatSampleCount(
+                record.sampleCount
+            );
+
+
+        const className =
+            getClassName(
+                classId
+            );
+
+
+        /*
+            If this was the FIRST sample
+            for the CURRENT item:
+
+            1. Move it down.
+            2. Create a new current item.
+        */
+
+        if (
+            record.sampleCount === 1 &&
+            record.isCurrent
         ) {
-            predictionOverlay.className =
-                "recognized";
 
-            overlayName.textContent =
-                itemName;
+            moveCurrentItemToTrained(
+                classId
+            );
 
-            overlayConfidence.textContent =
-                confidencePercent +
-                "% confidence";
-        }
 
+            const newRecord =
+                createClassPanel();
 
-        function showUnrecognizedOverlay(
-            confidencePercent
-        ) {
-            predictionOverlay.className =
-                "unrecognized";
-
-            overlayName.textContent =
-                "Unrecognized Item";
-
-            overlayConfidence.textContent =
-                "Best match: " +
-                confidencePercent +
-                "%";
-        }
-
-
-        function showWaitingOverlay() {
-            predictionOverlay.className =
-                "unrecognized";
-
-            overlayName.textContent =
-                "Analysing camera...";
-
-            overlayConfidence.textContent =
-                "";
-        }
-
-
-        function hidePredictionOverlay() {
-            predictionOverlay.className = "";
-
-            overlayName.textContent =
-                "Waiting for prediction";
-
-            overlayConfidence.textContent =
-                "";
-        }
-
-
-        // =====================================================
-        // PREDICTION
-        // =====================================================
-
-        function startPrediction() {
-            if (!classifier) {
-                statusDiv.textContent =
-                    "Classifier is not ready.";
-
-                return;
-            }
-
-            if (
-                classifier.getNumClasses() === 0
-            ) {
-                alert(
-                    "Please add or load training samples first."
-                );
-
-                return;
-            }
-
-            if (isPredicting) {
-                return;
-            }
-
-            isPredicting = true;
-
-            predictButton.textContent =
-                "Stop Predicting";
-
-            statusDiv.textContent =
-                "AI is running live prediction...";
-
-            showWaitingOverlay();
-            runPredictionLoop();
-        }
-
-
-        function stopPrediction(
-            showStatus = true
-        ) {
-            isPredicting = false;
-
-            predictButton.textContent =
-                "Start Predicting";
-
-            if (
-                predictionFrame !== null
-            ) {
-                cancelAnimationFrame(
-                    predictionFrame
-                );
-
-                predictionFrame = null;
-            }
-
-            hidePredictionOverlay();
-
-            if (showStatus) {
-                statusDiv.textContent =
-                    "Prediction stopped.";
-            }
-        }
-
-
-        function togglePrediction() {
-            if (isPredicting) {
-                stopPrediction(true);
-            } else {
-                startPrediction();
-            }
-        }
-
-
-        async function runPredictionLoop() {
-            if (!isPredicting) {
-                return;
-            }
-
-            let activation = null;
-
-            try {
-                if (
-                    !classifier ||
-                    classifier.getNumClasses() === 0
-                ) {
-                    stopPrediction(false);
-
-                    statusDiv.textContent =
-                        "No trained items available.";
-
-                    return;
-                }
-
-                if (video.readyState < 2) {
-                    predictionFrame =
-                        requestAnimationFrame(
-                            runPredictionLoop
-                        );
-
-                    return;
-                }
-
-                activation =
-                    mobilenetModel.infer(
-                        video,
-                        "conv_preds"
-                    );
-
-                const result =
-                    await classifier.predictClass(
-                        activation
-                    );
-
-                const predictedClassId =
-                    Number(result.label);
-
-                const confidenceValue =
-                    Number(
-                        result.confidences[
-                            result.label
-                        ] || 0
-                    );
-
-                const confidencePercent =
-                    Math.round(
-                        confidenceValue * 100
-                    );
-
-                const threshold =
-                    getConfidenceThreshold();
-
-                const record =
-                    classRecords.get(
-                        predictedClassId
-                    );
-
-                if (
-                    confidenceValue < threshold ||
-                    !record
-                ) {
-                    showUnrecognizedOverlay(
-                        confidencePercent
-                    );
-                } else {
-                    showRecognizedOverlay(
-                        getClassName(
-                            predictedClassId
-                        ),
-                        confidencePercent
-                    );
-                }
-            } catch (error) {
-                console.error(
-                    "Prediction error:",
-                    error
-                );
-
-                stopPrediction(false);
-
-                statusDiv.textContent =
-                    "Prediction Error: " +
-                    error.message;
-
-                return;
-            } finally {
-                if (activation) {
-                    activation.dispose();
-                }
-            }
-
-            if (isPredicting) {
-                predictionFrame =
-                    requestAnimationFrame(
-                        runPredictionLoop
-                    );
-            }
-        }
-
-
-        // =====================================================
-        // SAVE TRAINING DATA
-        // =====================================================
-
-        async function saveTrainingData() {
-            if (
-                !classifier ||
-                classifier.getNumClasses() === 0
-            ) {
-                alert(
-                    "There is no training data to save."
-                );
-
-                return;
-            }
-
-            stopPrediction(false);
-
-            try {
-                statusDiv.textContent =
-                    "Preparing training data...";
-
-                const dataset =
-                    classifier.getClassifierDataset();
-
-                const serializedDataset = {};
-
-                for (
-                    const classId
-                    of Object.keys(dataset)
-                ) {
-                    const tensor =
-                        dataset[classId];
-
-                    serializedDataset[classId] = {
-                        shape: tensor.shape,
-                        values:
-                            Array.from(
-                                await tensor.data()
-                            )
-                    };
-                }
-
-                const classes =
-                    Array.from(
-                        classRecords.values()
-                    )
-                    .filter(function (record) {
-                        return record.sampleCount > 0;
-                    })
-                    .map(function (record) {
-                        return {
-                            classId:
-                                record.classId,
-
-                            name:
-                                getClassName(
-                                    record.classId
-                                ),
-
-                            sampleCount:
-                                record.sampleCount
-                        };
-                    });
-
-                const saveData = {
-                    format:
-                        "AEYE-KNN-Training",
-
-                    formatVersion:
-                        1,
-
-                    tensorflowVersion:
-                        tf.version.tfjs,
-
-                    featureModel:
-                        "MobileNet conv_preds",
-
-                    confidenceThreshold:
-                        Number(
-                            thresholdSlider.value
-                        ),
-
-                    classes:
-                        classes,
-
-                    dataset:
-                        serializedDataset
-                };
-
-                const jsonText =
-                    JSON.stringify(
-                        saveData
-                    );
-
-                const blob =
-                    new Blob(
-                        [jsonText],
-                        {
-                            type:
-                                "application/json"
-                        }
-                    );
-
-                const downloadUrl =
-                    URL.createObjectURL(blob);
-
-                const link =
-                    document.createElement("a");
-
-                const dateText =
-                    new Date()
-                        .toISOString()
-                        .slice(0, 10);
-
-                link.href =
-                    downloadUrl;
-
-                link.download =
-                    "AEYE-training-" +
-                    dateText +
-                    ".json";
-
-                document.body.appendChild(
-                    link
-                );
-
-                link.click();
-                link.remove();
-
-                URL.revokeObjectURL(
-                    downloadUrl
-                );
-
-                statusDiv.textContent =
-                    "Training data saved successfully.";
-            } catch (error) {
-                console.error(
-                    "Save training error:",
-                    error
-                );
-
-                statusDiv.textContent =
-                    "Unable to save training data: " +
-                    error.message;
-            }
-        }
-
-
-        // =====================================================
-        // LOAD TRAINING DATA
-        // =====================================================
-
-        function validateTrainingData(data) {
-            if (
-                !data ||
-                typeof data !== "object"
-            ) {
-                throw new Error(
-                    "Invalid training file."
-                );
-            }
-
-            if (
-                data.format !==
-                "AEYE-KNN-Training"
-            ) {
-                throw new Error(
-                    "This is not an AEYE training file."
-                );
-            }
-
-            if (
-                !Array.isArray(data.classes)
-            ) {
-                throw new Error(
-                    "The training file has no class list."
-                );
-            }
-
-            if (
-                !data.dataset ||
-                typeof data.dataset !== "object"
-            ) {
-                throw new Error(
-                    "The training file has no classifier dataset."
-                );
-            }
-        }
-
-
-        async function loadTrainingFile(file) {
-            if (!file) {
-                return;
-            }
-
-            stopPrediction(false);
-
-            try {
-                statusDiv.textContent =
-                    "Loading training data...";
-
-                const jsonText =
-                    await file.text();
-
-                const data =
-                    JSON.parse(jsonText);
-
-                validateTrainingData(data);
-
-                const restoredDataset = {};
-
-                for (
-                    const classId
-                    of Object.keys(data.dataset)
-                ) {
-                    const savedTensor =
-                        data.dataset[classId];
-
-                    if (
-                        !savedTensor ||
-                        !Array.isArray(
-                            savedTensor.shape
-                        ) ||
-                        !Array.isArray(
-                            savedTensor.values
-                        )
-                    ) {
-                        throw new Error(
-                            "Invalid tensor data for item " +
-                            classId +
-                            "."
-                        );
-                    }
-
-                    restoredDataset[classId] =
-                        tf.tensor(
-                            savedTensor.values,
-                            savedTensor.shape,
-                            "float32"
-                        );
-                }
-
-                if (
-                    Object.keys(
-                        restoredDataset
-                    ).length === 0
-                ) {
-                    throw new Error(
-                        "The training file contains no samples."
-                    );
-                }
-
-                /*
-                    Clear the old classifier data before
-                    replacing it with the loaded data.
-                */
-                classifier.clearAllClasses();
-
-                classifier.setClassifierDataset(
-                    restoredDataset
-                );
-
-                clearClassPanels();
-
-                const sortedClasses =
-                    data.classes
-                        .slice()
-                        .sort(function (a, b) {
-                            return (
-                                Number(a.classId) -
-                                Number(b.classId)
-                            );
-                        });
-
-                sortedClasses.forEach(
-                    function (savedClass) {
-                        const classId =
-                            Number(
-                                savedClass.classId
-                            );
-
-                        const datasetEntry =
-                            restoredDataset[
-                                String(classId)
-                            ];
-
-                        let sampleCount =
-                            Number(
-                                savedClass.sampleCount
-                            ) || 0;
-
-                        /*
-                            The first tensor dimension is
-                            normally the number of samples.
-                        */
-                        if (
-                            datasetEntry &&
-                            datasetEntry.shape.length > 0
-                        ) {
-                            sampleCount =
-                                datasetEntry.shape[0];
-                        }
-
-                        createClassPanel(
-                            classId,
-                            savedClass.name ||
-                                getDefaultClassName(
-                                    classId
-                                ),
-                            sampleCount
-                        );
-                    }
-                );
-
-                /*
-                    Handle any dataset class that may be
-                    missing from the class information.
-                */
-                Object.keys(
-                    restoredDataset
-                ).forEach(function (classIdText) {
-                    const classId =
-                        Number(classIdText);
-
-                    if (
-                        !classRecords.has(classId)
-                    ) {
-                        const tensor =
-                            restoredDataset[
-                                classIdText
-                            ];
-
-                        createClassPanel(
-                            classId,
-                            getDefaultClassName(
-                                classId
-                            ),
-                            tensor.shape[0] || 0
-                        );
-                    }
-                });
-
-                ensureEmptyClassExists();
-
-                const savedThreshold =
-                    Number(
-                        data.confidenceThreshold
-                    );
-
-                if (
-                    Number.isFinite(
-                        savedThreshold
-                    )
-                ) {
-                    const safeThreshold =
-                        Math.min(
-                            99,
-                            Math.max(
-                                50,
-                                savedThreshold
-                            )
-                        );
-
-                    thresholdSlider.value =
-                        String(safeThreshold);
-
-                    thresholdValue.textContent =
-                        safeThreshold + "%";
-                }
-
-                enableControls();
-                updateSaveButton();
-
-                statusDiv.textContent =
-                    "Training data loaded. " +
-                    classifier.getNumClasses() +
-                    " trained item class(es) ready.";
-
-                hidePredictionOverlay();
-            } catch (error) {
-                console.error(
-                    "Load training error:",
-                    error
-                );
-
-                statusDiv.textContent =
-                    "Unable to load training data: " +
-                    error.message;
-            } finally {
-                /*
-                    Clear the file selection so that the
-                    same file can be selected again.
-                */
-                trainingFileInput.value = "";
-            }
-        }
-
-
-        // =====================================================
-        // RESET
-        // =====================================================
-
-        function resetAll() {
-            stopPrediction(false);
-
-            if (classifier) {
-                classifier.clearAllClasses();
-            }
-
-            clearClassPanels();
-            createClassPanel();
 
             enableControls();
-            updateSaveButton();
-            hidePredictionOverlay();
+
+
+            /*
+                Select the new item name
+                immediately for easy typing.
+            */
+
+            newRecord.input.focus();
+
+            newRecord.input.select();
+
 
             statusDiv.textContent =
-                "All training samples cleared.";
+                '"' +
+                className +
+                '" added. Train the next item.';
+
+        }
+
+        else {
+
+            statusDiv.textContent =
+                'Added sample for "' +
+                className +
+                '". Total: ' +
+                record.sampleCount +
+                ".";
+
         }
 
 
-        // =====================================================
-        // INITIALIZATION
-        // =====================================================
+        updateSaveButton();
 
-        async function initializeApp() {
-            try {
-                statusDiv.textContent =
-                    "Checking AI libraries...";
+    }
 
-                checkLibraries();
+    catch (error) {
 
-                statusDiv.textContent =
-                    "Preparing TensorFlow...";
+        console.error(
+            "Add sample error:",
+            error
+        );
 
-                await tf.ready();
 
-                console.log(
-                    "TensorFlow backend:",
-                    tf.getBackend()
-                );
+        statusDiv.textContent =
+            "Unable to add sample: " +
+            error.message;
 
-                classifier =
-                    knnClassifier.create();
+    }
 
-                statusDiv.textContent =
-                    "Loading MobileNet model...";
+    finally {
 
-                mobilenetModel =
-                    await mobilenet.load();
+        if (activation) {
 
-                statusDiv.textContent =
-                    "Requesting camera permission...";
+            activation.dispose();
 
-                await setupCamera();
+        }
 
-                enableControls();
+    }
 
-                statusDiv.textContent =
-                    "Ready! Train a new item or load saved training data.";
-            } catch (error) {
-                console.error(
-                    "Initialization error:",
-                    error
-                );
+}
 
-                statusDiv.textContent =
-                    "Initialization Error: " +
-                    error.message;
-            }
+
+// ========================================================
+// REMOVE CLASS
+// ========================================================
+
+function removeClass(classId) {
+
+    const record =
+        classRecords.get(
+            classId
+        );
+
+
+    if (!record) {
+        return;
+    }
+
+
+    stopPrediction(false);
+
+
+    try {
+
+        if (
+            classifier &&
+            record.sampleCount > 0
+        ) {
+
+            classifier.clearClass(
+                classId
+            );
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.warn(
+            error
+        );
+
+    }
+
+
+    record.element.remove();
+
+
+    classRecords.delete(
+        classId
+    );
+
+
+    if (
+        currentClassId === classId
+    ) {
+
+        currentClassId =
+            null;
+
+    }
+
+
+    /*
+        Always make sure there is
+        one current item available.
+    */
+
+    if (
+        currentClassId === null
+    ) {
+
+        createClassPanel();
+
+    }
+
+
+    updateTrainedSection();
+
+    updateSaveButton();
+
+    hidePredictionOverlay();
+
+
+    statusDiv.textContent =
+        "Item removed.";
+
+}
+
+
+// ========================================================
+// CONTROLS
+// ========================================================
+
+function enableControls() {
+
+    const ready =
+        Boolean(
+            classifier &&
+            mobilenetModel
+        );
+
+
+    classRecords.forEach(
+        function (record) {
+
+            record.button.disabled =
+                !ready;
+
+        }
+    );
+
+
+    predictButton.disabled =
+        !ready;
+
+
+    loadTrainingButton.disabled =
+        !ready;
+
+
+    updateSaveButton();
+
+}
+
+
+function updateSaveButton() {
+
+    saveTrainingButton.disabled =
+        !classifier ||
+        classifier.getNumClasses() === 0;
+
+}
+
+
+// ========================================================
+// PREDICTION OVERLAY
+// ========================================================
+
+function showRecognizedOverlay(
+    name,
+    confidence
+) {
+
+    predictionOverlay.className =
+        "recognized";
+
+
+    overlayName.textContent =
+        name;
+
+
+    overlayConfidence.textContent =
+        confidence +
+        "% confidence";
+
+}
+
+
+function showUnrecognizedOverlay(
+    confidence
+) {
+
+    predictionOverlay.className =
+        "unrecognized";
+
+
+    overlayName.textContent =
+        "Unrecognized Item";
+
+
+    overlayConfidence.textContent =
+        "Best match: " +
+        confidence +
+        "%";
+
+}
+
+
+function showWaitingOverlay() {
+
+    predictionOverlay.className =
+        "unrecognized";
+
+
+    overlayName.textContent =
+        "Analysing...";
+
+
+    overlayConfidence.textContent =
+        "";
+
+}
+
+
+function hidePredictionOverlay() {
+
+    predictionOverlay.className =
+        "";
+
+
+    overlayName.textContent =
+        "";
+
+
+    overlayConfidence.textContent =
+        "";
+
+}
+
+
+// ========================================================
+// PREDICTION
+// ========================================================
+
+function startPrediction() {
+
+    if (
+        !classifier ||
+        classifier.getNumClasses() === 0
+    ) {
+
+        alert(
+            "Please train or load at least one item first."
+        );
+
+        return;
+
+    }
+
+
+    if (isPredicting) {
+        return;
+    }
+
+
+    isPredicting =
+        true;
+
+
+    predictButton.textContent =
+        "Stop Predicting";
+
+
+    statusDiv.textContent =
+        "AI is running live prediction...";
+
+
+    showWaitingOverlay();
+
+
+    runPredictionLoop();
+
+}
+
+
+function stopPrediction(
+    showStatus = true
+) {
+
+    isPredicting =
+        false;
+
+
+    predictButton.textContent =
+        "Start Predicting";
+
+
+    if (
+        predictionFrame !== null
+    ) {
+
+        cancelAnimationFrame(
+            predictionFrame
+        );
+
+
+        predictionFrame =
+            null;
+
+    }
+
+
+    hidePredictionOverlay();
+
+
+    if (showStatus) {
+
+        statusDiv.textContent =
+            "Prediction stopped.";
+
+    }
+
+}
+
+
+function togglePrediction() {
+
+    if (isPredicting) {
+
+        stopPrediction(true);
+
+    }
+
+    else {
+
+        startPrediction();
+
+    }
+
+}
+
+
+async function runPredictionLoop() {
+
+    if (!isPredicting) {
+        return;
+    }
+
+
+    let activation = null;
+
+
+    try {
+
+        if (
+            !classifier ||
+            classifier.getNumClasses() === 0
+        ) {
+
+            stopPrediction(false);
+
+            return;
+
         }
 
 
-        // =====================================================
-        // EVENTS
-        // =====================================================
+        if (
+            video.readyState < 2
+        ) {
 
-        addClassButton.addEventListener(
-            "click",
-            function () {
-                const newRecord =
-                    createClassPanel();
-
-                newRecord.input.focus();
-
-                statusDiv.textContent =
-                    "New training item added.";
-            }
-        );
-
-
-        toggleCameraButton.addEventListener(
-            "click",
-            switchCamera
-        );
-
-
-        predictButton.addEventListener(
-            "click",
-            togglePrediction
-        );
-
-
-        resetButton.addEventListener(
-            "click",
-            resetAll
-        );
-
-
-        saveTrainingButton.addEventListener(
-            "click",
-            saveTrainingData
-        );
-
-
-        loadTrainingButton.addEventListener(
-            "click",
-            function () {
-                trainingFileInput.click();
-            }
-        );
-
-
-        trainingFileInput.addEventListener(
-            "change",
-            function () {
-                const selectedFile =
-                    trainingFileInput.files[0];
-
-                loadTrainingFile(
-                    selectedFile
+            predictionFrame =
+                requestAnimationFrame(
+                    runPredictionLoop
                 );
-            }
+
+            return;
+
+        }
+
+
+        activation =
+            mobilenetModel.infer(
+                video,
+                "conv_preds"
+            );
+
+
+        const result =
+            await classifier.predictClass(
+                activation
+            );
+
+
+        const predictedClassId =
+            Number(
+                result.label
+            );
+
+
+        const confidence =
+            Number(
+                result.confidences[
+                    result.label
+                ] || 0
+            );
+
+
+        const confidencePercent =
+            Math.round(
+                confidence * 100
+            );
+
+
+        const threshold =
+            getConfidenceThreshold();
+
+
+        const record =
+            classRecords.get(
+                predictedClassId
+            );
+
+
+        if (
+            confidence < threshold ||
+            !record
+        ) {
+
+            showUnrecognizedOverlay(
+                confidencePercent
+            );
+
+        }
+
+        else {
+
+            showRecognizedOverlay(
+                getClassName(
+                    predictedClassId
+                ),
+                confidencePercent
+            );
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(
+            error
         );
 
 
-        window.addEventListener(
-            "load",
-            function () {
-                createClassPanel();
-                initializeApp();
-            }
+        stopPrediction(false);
+
+
+        statusDiv.textContent =
+            "Prediction Error: " +
+            error.message;
+
+
+        return;
+
+    }
+
+    finally {
+
+        if (activation) {
+
+            activation.dispose();
+
+        }
+
+    }
+
+
+    if (isPredicting) {
+
+        predictionFrame =
+            requestAnimationFrame(
+                runPredictionLoop
+            );
+
+    }
+
+}
+
+
+// ========================================================
+// SAVE TRAINING DATA
+// ========================================================
+
+async function saveTrainingData() {
+
+    if (
+        !classifier ||
+        classifier.getNumClasses() === 0
+    ) {
+
+        alert(
+            "There is no training data to save."
         );
 
+        return;
 
-        window.addEventListener(
-            "beforeunload",
-            function () {
-                stopPrediction(false);
-                stopCurrentCamera();
+    }
 
-                if (classifier) {
-                    classifier.clearAllClasses();
+
+    stopPrediction(false);
+
+
+    try {
+
+        statusDiv.textContent =
+            "Preparing training data...";
+
+
+        const dataset =
+            classifier.getClassifierDataset();
+
+
+        const serializedDataset =
+            {};
+
+
+        for (
+            const classId
+            of Object.keys(dataset)
+        ) {
+
+            const tensor =
+                dataset[classId];
+
+
+            serializedDataset[classId] = {
+
+                shape:
+                    tensor.shape,
+
+                values:
+                    Array.from(
+                        await tensor.data()
+                    )
+
+            };
+
+        }
+
+
+        const classes =
+            Array.from(
+                classRecords.values()
+            )
+            .filter(
+                function (record) {
+
+                    return (
+                        record.sampleCount > 0
+                    );
+
                 }
+            )
+            .map(
+                function (record) {
+
+                    return {
+
+                        classId:
+                            record.classId,
+
+                        name:
+                            getClassName(
+                                record.classId
+                            ),
+
+                        sampleCount:
+                            record.sampleCount
+
+                    };
+
+                }
+            );
+
+
+        const saveData = {
+
+            format:
+                "AEYE-KNN-Training",
+
+            formatVersion:
+                1,
+
+            tensorflowVersion:
+                tf.version.tfjs,
+
+            featureModel:
+                "MobileNet conv_preds",
+
+            confidenceThreshold:
+                Number(
+                    thresholdSlider.value
+                ),
+
+            classes:
+                classes,
+
+            dataset:
+                serializedDataset
+
+        };
+
+
+        const json =
+            JSON.stringify(
+                saveData
+            );
+
+
+        const blob =
+            new Blob(
+                [json],
+                {
+                    type:
+                        "application/json"
+                }
+            );
+
+
+        const url =
+            URL.createObjectURL(
+                blob
+            );
+
+
+        const link =
+            document.createElement(
+                "a"
+            );
+
+
+        const date =
+            new Date()
+                .toISOString()
+                .slice(
+                    0,
+                    10
+                );
+
+
+        link.href =
+            url;
+
+
+        link.download =
+            "AEYE-training-" +
+            date +
+            ".json";
+
+
+        document.body.appendChild(
+            link
+        );
+
+
+        link.click();
+
+        link.remove();
+
+
+        URL.revokeObjectURL(
+            url
+        );
+
+
+        statusDiv.textContent =
+            "Training data saved successfully.";
+
+    }
+
+    catch (error) {
+
+        console.error(
+            error
+        );
+
+
+        statusDiv.textContent =
+            "Unable to save training data: " +
+            error.message;
+
+    }
+
+}
+
+
+// ========================================================
+// LOAD TRAINING DATA
+// ========================================================
+
+function validateTrainingData(data) {
+
+    if (
+        !data ||
+        typeof data !== "object"
+    ) {
+
+        throw new Error(
+            "Invalid training file."
+        );
+
+    }
+
+
+    if (
+        data.format !==
+        "AEYE-KNN-Training"
+    ) {
+
+        throw new Error(
+            "This is not an AEYE training file."
+        );
+
+    }
+
+
+    if (
+        !Array.isArray(
+            data.classes
+        )
+    ) {
+
+        throw new Error(
+            "Training class list is missing."
+        );
+
+    }
+
+
+    if (
+        !data.dataset ||
+        typeof data.dataset !== "object"
+    ) {
+
+        throw new Error(
+            "Training dataset is missing."
+        );
+
+    }
+
+}
+
+
+function clearClassPanels() {
+
+    classRecords.forEach(
+        function (record) {
+
+            record.element.remove();
+
+        }
+    );
+
+
+    classRecords.clear();
+
+
+    currentClassContainer.innerHTML =
+        "";
+
+
+    trainedList.innerHTML =
+        "";
+
+
+    trainedSection.style.display =
+        "none";
+
+
+    nextClassId =
+        0;
+
+
+    currentClassId =
+        null;
+
+}
+
+
+async function loadTrainingFile(file) {
+
+    if (!file) {
+        return;
+    }
+
+
+    stopPrediction(false);
+
+
+    try {
+
+        statusDiv.textContent =
+            "Loading training data...";
+
+
+        const text =
+            await file.text();
+
+
+        const data =
+            JSON.parse(
+                text
+            );
+
+
+        validateTrainingData(
+            data
+        );
+
+
+        const restoredDataset =
+            {};
+
+
+        for (
+            const classId
+            of Object.keys(
+                data.dataset
+            )
+        ) {
+
+            const saved =
+                data.dataset[
+                    classId
+                ];
+
+
+            if (
+                !saved ||
+                !Array.isArray(
+                    saved.shape
+                ) ||
+                !Array.isArray(
+                    saved.values
+                )
+            ) {
+
+                throw new Error(
+                    "Invalid data for class " +
+                    classId
+                );
+
+            }
+
+
+            restoredDataset[
+                classId
+            ] =
+                tf.tensor(
+                    saved.values,
+                    saved.shape,
+                    "float32"
+                );
+
+        }
+
+
+        if (
+            Object.keys(
+                restoredDataset
+            ).length === 0
+        ) {
+
+            throw new Error(
+                "Training file contains no samples."
+            );
+
+        }
+
+
+        classifier.clearAllClasses();
+
+
+        classifier.setClassifierDataset(
+            restoredDataset
+        );
+
+
+        clearClassPanels();
+
+
+        const sortedClasses =
+            data.classes
+                .slice()
+                .sort(
+                    function (a, b) {
+
+                        return (
+                            Number(a.classId) -
+                            Number(b.classId)
+                        );
+
+                    }
+                );
+
+
+        /*
+            Loaded classes are already trained,
+            so they go directly into the
+            Previously Trained Items section.
+        */
+
+        sortedClasses.forEach(
+            function (savedClass) {
+
+                const classId =
+                    Number(
+                        savedClass.classId
+                    );
+
+
+                const datasetEntry =
+                    restoredDataset[
+                        String(classId)
+                    ];
+
+
+                let sampleCount =
+                    Number(
+                        savedClass.sampleCount
+                    ) || 0;
+
+
+                if (
+                    datasetEntry &&
+                    datasetEntry.shape.length > 0
+                ) {
+
+                    sampleCount =
+                        datasetEntry.shape[0];
+
+                }
+
+
+                createClassPanel(
+                    classId,
+                    savedClass.name ||
+                        getDefaultClassName(
+                            classId
+                        ),
+                    sampleCount,
+                    false
+                );
+
             }
         );
-    </script>
+
+
+        /*
+            Restore any dataset class not found
+            in the metadata.
+        */
+
+        Object.keys(
+            restoredDataset
+        ).forEach(
+            function (classIdText) {
+
+                const classId =
+                    Number(
+                        classIdText
+                    );
+
+
+                if (
+                    !classRecords.has(
+                        classId
+                    )
+                ) {
+
+                    const tensor =
+                        restoredDataset[
+                            classIdText
+                        ];
+
+
+                    createClassPanel(
+                        classId,
+                        getDefaultClassName(
+                            classId
+                        ),
+                        tensor.shape[0] || 0,
+                        false
+                    );
+
+                }
+
+            }
+        );
+
+
+        /*
+            Create one fresh current item
+            directly underneath the camera.
+        */
+
+        const newRecord =
+            createClassPanel();
+
+
+        const savedThreshold =
+            Number(
+                data.confidenceThreshold
+            );
+
+
+        if (
+            Number.isFinite(
+                savedThreshold
+            )
+        ) {
+
+            const safeThreshold =
+                Math.min(
+                    99,
+                    Math.max(
+                        50,
+                        savedThreshold
+                    )
+                );
+
+
+            thresholdSlider.value =
+                String(
+                    safeThreshold
+                );
+
+
+            thresholdValue.textContent =
+                safeThreshold +
+                "%";
+
+        }
+
+
+        enableControls();
+
+        updateTrainedSection();
+
+        updateSaveButton();
+
+        hidePredictionOverlay();
+
+
+        statusDiv.textContent =
+            "Training loaded. " +
+            classifier.getNumClasses() +
+            " trained item(s) ready.";
+
+
+        newRecord.input.focus();
+
+        newRecord.input.select();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Load training error:",
+            error
+        );
+
+
+        statusDiv.textContent =
+            "Unable to load training data: " +
+            error.message;
+
+    }
+
+    finally {
+
+        trainingFileInput.value =
+            "";
+
+    }
+
+}
+
+
+// ========================================================
+// RESET
+// ========================================================
+
+function resetAll() {
+
+    stopPrediction(false);
+
+
+    if (classifier) {
+
+        classifier.clearAllClasses();
+
+    }
+
+
+    clearClassPanels();
+
+
+    createClassPanel();
+
+
+    enableControls();
+
+    updateTrainedSection();
+
+    updateSaveButton();
+
+    hidePredictionOverlay();
+
+
+    statusDiv.textContent =
+        "All training samples cleared.";
+
+}
+
+
+// ========================================================
+// COLLAPSIBLE TRAINED LIST
+// ========================================================
+
+trainedToggle.addEventListener(
+    "click",
+    function () {
+
+        trainedList.classList.toggle(
+            "trained-hidden"
+        );
+
+
+        updateTrainedSection();
+
+    }
+);
+
+
+// ========================================================
+// INITIALIZATION
+// ========================================================
+
+async function initializeApp() {
+
+    try {
+
+        statusDiv.textContent =
+            "Checking AI libraries...";
+
+
+        checkLibraries();
+
+
+        statusDiv.textContent =
+            "Preparing TensorFlow...";
+
+
+        await tf.ready();
+
+
+        console.log(
+            "TensorFlow backend:",
+            tf.getBackend()
+        );
+
+
+        classifier =
+            knnClassifier.create();
+
+
+        statusDiv.textContent =
+            "Loading MobileNet model...";
+
+
+        mobilenetModel =
+            await mobilenet.load();
+
+
+        statusDiv.textContent =
+            "Requesting camera permission...";
+
+
+        await setupCamera();
+
+
+        enableControls();
+
+
+        statusDiv.textContent =
+            "Ready! Name the current item and add samples.";
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Initialization error:",
+            error
+        );
+
+
+        statusDiv.textContent =
+            "Initialization Error: " +
+            error.message;
+
+    }
+
+}
+
+
+// ========================================================
+// EVENTS
+// ========================================================
+
+toggleCameraButton.addEventListener(
+    "click",
+    switchCamera
+);
+
+
+predictButton.addEventListener(
+    "click",
+    togglePrediction
+);
+
+
+resetButton.addEventListener(
+    "click",
+    resetAll
+);
+
+
+saveTrainingButton.addEventListener(
+    "click",
+    saveTrainingData
+);
+
+
+loadTrainingButton.addEventListener(
+    "click",
+    function () {
+
+        trainingFileInput.click();
+
+    }
+);
+
+
+trainingFileInput.addEventListener(
+    "change",
+    function () {
+
+        const file =
+            trainingFileInput.files[0];
+
+
+        loadTrainingFile(
+            file
+        );
+
+    }
+);
+
+
+// ========================================================
+// START
+// ========================================================
+
+window.addEventListener(
+    "load",
+    function () {
+
+        /*
+            Start with one current item directly
+            underneath the camera.
+        */
+
+        createClassPanel();
+
+
+        initializeApp();
+
+    }
+);
+
+
+// ========================================================
+// CLEAN UP
+// ========================================================
+
+window.addEventListener(
+    "beforeunload",
+    function () {
+
+        stopPrediction(false);
+
+        stopCurrentCamera();
+
+
+        if (classifier) {
+
+            classifier.clearAllClasses();
+
+        }
+
+    }
+);
+
+</script>
 
 </body>
 </html>
