@@ -2,80 +2,181 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Custom AI Camera Trainer</title>
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
-                         Roboto, sans-serif;
+                         Roboto, Arial, sans-serif;
             text-align: center;
             background: #121212;
-            color: #fff;
+            color: #ffffff;
             margin: 0;
             padding: 15px;
         }
 
         h2 {
-            font-size: 1.3rem;
-            margin-bottom: 10px;
+            font-size: 1.35rem;
+            margin: 5px 0 10px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 430px;
+            margin: 0 auto;
         }
 
         .video-container {
-            position: relative;
             width: 100%;
-            max-width: 400px;
             margin: 0 auto;
         }
 
         video {
+            display: block;
             width: 100%;
-            max-width: 400px;
             height: 300px;
             object-fit: cover;
-            border: 2px solid #444;
+            background: #000000;
+            border: 2px solid #444444;
             border-radius: 8px;
-            background: #000;
+        }
+
+        #status {
+            color: #ff9800;
+            font-size: 0.95rem;
+            font-weight: bold;
+            margin: 12px 0;
+            padding: 0 5px;
+            word-break: break-word;
+        }
+
+        #prediction {
+            color: #4caf50;
+            background: #1e1e1e;
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 14px;
+            margin-top: 15px;
+            border-radius: 7px;
+            word-break: break-word;
         }
 
         .controls {
             margin-top: 15px;
-            max-width: 400px;
-            margin-left: auto;
-            margin-right: auto;
+        }
+
+        .settings-box {
+            background: #1e1e1e;
+            padding: 12px;
+            border-radius: 7px;
+            margin-bottom: 12px;
+            text-align: left;
+        }
+
+        .settings-title {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .threshold-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #threshold {
+            flex: 1;
+        }
+
+        #threshold-value {
+            color: #00bcd4;
+            font-weight: bold;
+            min-width: 45px;
+            text-align: right;
+        }
+
+        .threshold-note {
+            color: #aaaaaa;
+            font-size: 0.82rem;
+            line-height: 1.4;
+            margin-top: 8px;
+        }
+
+        #classes-container {
+            margin-top: 12px;
         }
 
         .class-group {
             background: #1e1e1e;
-            padding: 10px;
-            border-radius: 6px;
+            padding: 11px;
+            border-radius: 7px;
             margin-bottom: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
         }
 
-        input[type="text"] {
+        .class-heading {
+            color: #bbbbbb;
+            font-size: 0.82rem;
+            text-align: left;
+            margin-bottom: 7px;
+        }
+
+        .class-name {
+            width: 100%;
             padding: 10px;
             font-size: 16px;
-            border-radius: 4px;
-            border: 1px solid #555;
+            color: #ffffff;
             background: #2c2c2c;
-            color: #fff;
-            width: 100%;
-            box-sizing: border-box;
+            border: 1px solid #555555;
+            border-radius: 4px;
+        }
+
+        .sample-button {
+            background: #008ba3;
+            margin-top: 8px;
+        }
+
+        .class-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .sample-count {
+            color: #aaaaaa;
+            font-size: 0.88rem;
+            text-align: left;
+        }
+
+        .remove-button {
+            width: auto;
+            padding: 7px 10px;
+            background: #6d4c41;
+            font-size: 0.82rem;
         }
 
         button {
+            width: 100%;
             padding: 12px;
-            font-size: 15px;
-            cursor: pointer;
+            color: #ffffff;
             border: none;
             border-radius: 4px;
+            font-size: 15px;
             font-weight: bold;
-            color: #fff;
-            width: 100%;
+            cursor: pointer;
+            touch-action: manipulation;
         }
 
         button:active {
@@ -87,39 +188,46 @@
             cursor: not-allowed;
         }
 
-        #status {
-            font-size: 0.95rem;
-            margin: 12px 0;
-            color: #ff9800;
-            font-weight: bold;
-            padding: 0 5px;
-            word-break: break-word;
-        }
-
-        #prediction {
-            font-size: 1.2rem;
-            color: #4CAF50;
-            margin-top: 15px;
-            font-weight: bold;
-            background: #1e1e1e;
-            padding: 12px;
-            border-radius: 6px;
-            max-width: 400px;
-            margin-left: auto;
-            margin-right: auto;
+        .camera-button {
+            background: #607d8b;
         }
 
         .action-row {
             display: flex;
             gap: 10px;
-            margin-top: 10px;
+            margin-top: 12px;
+        }
+
+        #predict {
+            background: #4caf50;
+        }
+
+        #reset {
+            background: #f44336;
+        }
+
+        .add-class-button {
+            background: #6a1b9a;
+            margin-top: 2px;
+        }
+
+        .small-note {
+            color: #999999;
+            font-size: 0.8rem;
+            line-height: 1.4;
+            margin: 10px 4px 0;
+        }
+
+        @media (max-width: 380px) {
+            video {
+                height: 260px;
+            }
+
+            .action-row {
+                flex-direction: column;
+            }
         }
     </style>
-
-
-    <!-- ================================================ -->
-    <!-- AI LIBRARIES                                    -->
-    <!-- ================================================ -->
 
     <!-- TensorFlow.js -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js"></script>
@@ -129,1138 +237,1007 @@
 
     <!-- KNN Classifier -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/knn-classifier@1.2.6/dist/knn-classifier.min.js"></script>
-
 </head>
 
 <body>
 
-    <h2>Custom AI Camera Trainer</h2>
+    <div class="container">
 
-    <div id="status">
-        Initializing system...
-    </div>
+        <h2>Custom AI Camera Trainer</h2>
 
+        <div id="status">
+            Initializing system...
+        </div>
 
-    <!-- CAMERA -->
+        <div class="video-container">
+            <video
+                id="webcam"
+                autoplay
+                playsinline
+                muted
+            ></video>
+        </div>
 
-    <div class="video-container">
-
-        <video
-            id="webcam"
-            autoplay
-            playsinline
-            muted>
-        </video>
-
-    </div>
-
-
-    <!-- CONTROLS -->
-
-    <div class="controls">
-
-        <div style="margin-bottom: 12px;">
+        <div class="controls">
 
             <button
                 id="toggle-camera"
-                style="background:#607D8B;">
+                class="camera-button"
+                type="button"
+            >
                 Switch to Rear Camera
             </button>
 
+            <div class="settings-box">
+
+                <label
+                    class="settings-title"
+                    for="threshold"
+                >
+                    Recognition Threshold
+                </label>
+
+                <div class="threshold-row">
+
+                    <input
+                        id="threshold"
+                        type="range"
+                        min="50"
+                        max="99"
+                        value="75"
+                        step="1"
+                    >
+
+                    <span id="threshold-value">
+                        75%
+                    </span>
+
+                </div>
+
+                <div class="threshold-note">
+                    Results below this confidence level will be shown as
+                    “Unrecognized Item”.
+                </div>
+
+            </div>
+
+            <div id="classes-container"></div>
+
+            <button
+                id="add-class"
+                class="add-class-button"
+                type="button"
+            >
+                + Add Another Item
+            </button>
+
+            <div class="action-row">
+
+                <button
+                    id="predict"
+                    type="button"
+                    disabled
+                >
+                    Start Predicting
+                </button>
+
+                <button
+                    id="reset"
+                    type="button"
+                >
+                    Reset All
+                </button>
+
+            </div>
+
+            <div class="small-note">
+                For better results, collect at least 10 to 20 samples for
+                each item from different angles and distances.
+            </div>
+
         </div>
 
-
-        <!-- OBJECT A -->
-
-        <div class="class-group">
-
-            <input
-                type="text"
-                id="name-0"
-                value="Object A">
-
-            <button
-                id="btn-0"
-                disabled
-                style="background:#008ba3;">
-
-                Add Sample:
-                <span id="label-text-0">
-                    Object A
-                </span>
-
-            </button>
-
-            <span
-                id="count-0"
-                style="color:#aaa;font-size:0.9rem;">
-
-                0 samples
-
-            </span>
-
-        </div>
-
-
-        <!-- OBJECT B -->
-
-        <div class="class-group">
-
-            <input
-                type="text"
-                id="name-1"
-                value="Object B">
-
-            <button
-                id="btn-1"
-                disabled
-                style="background:#008ba3;">
-
-                Add Sample:
-                <span id="label-text-1">
-                    Object B
-                </span>
-
-            </button>
-
-            <span
-                id="count-1"
-                style="color:#aaa;font-size:0.9rem;">
-
-                0 samples
-
-            </span>
-
-        </div>
-
-
-        <!-- START / RESET -->
-
-        <div class="action-row">
-
-            <button
-                id="train"
-                disabled
-                style="background:#4CAF50;">
-                Start Predicting
-            </button>
-
-            <button
-                id="reset"
-                style="background:#f44336;">
-                Reset
-            </button>
-
+        <div id="prediction">
+            Prediction: Model not ready
         </div>
 
     </div>
 
 
-    <!-- PREDICTION -->
+    <script>
+        "use strict";
 
-    <div id="prediction">
-        Prediction: Model not ready
-    </div>
+        // =====================================================
+        // PAGE ELEMENTS
+        // =====================================================
 
+        const video =
+            document.getElementById("webcam");
 
+        const statusDiv =
+            document.getElementById("status");
 
-<script>
+        const predictionDiv =
+            document.getElementById("prediction");
 
-    // ==================================================
-    // ELEMENTS
-    // ==================================================
+        const classesContainer =
+            document.getElementById("classes-container");
 
-    const video = document.getElementById("webcam");
+        const toggleCameraButton =
+            document.getElementById("toggle-camera");
 
-    const statusDiv =
-        document.getElementById("status");
+        const addClassButton =
+            document.getElementById("add-class");
 
-    const predictionDiv =
-        document.getElementById("prediction");
+        const predictButton =
+            document.getElementById("predict");
 
-    const toggleCamBtn =
-        document.getElementById("toggle-camera");
+        const resetButton =
+            document.getElementById("reset");
 
-    const btn0 =
-        document.getElementById("btn-0");
+        const thresholdSlider =
+            document.getElementById("threshold");
 
-    const btn1 =
-        document.getElementById("btn-1");
-
-    const trainBtn =
-        document.getElementById("train");
-
-    const resetBtn =
-        document.getElementById("reset");
-
-    const nameInput0 =
-        document.getElementById("name-0");
-
-    const nameInput1 =
-        document.getElementById("name-1");
-
-    const labelText0 =
-        document.getElementById("label-text-0");
-
-    const labelText1 =
-        document.getElementById("label-text-1");
-
-    const count0Span =
-        document.getElementById("count-0");
-
-    const count1Span =
-        document.getElementById("count-1");
+        const thresholdValue =
+            document.getElementById("threshold-value");
 
 
-    // ==================================================
-    // VARIABLES
-    // ==================================================
+        // =====================================================
+        // APPLICATION STATE
+        // =====================================================
 
-    let classifier = null;
+        let classifier = null;
+        let mobilenetModel = null;
 
-    let mobilenetModel = null;
+        let useRearCamera = false;
+        let isPredicting = false;
+        let predictionFrame = null;
 
-    let isPredicting = false;
+        let nextClassId = 0;
 
-    let useRearCamera = false;
+        /*
+            Each entry uses:
 
-    let predictionFrame = null;
-
-    let sampleCounts = {
-        0: 0,
-        1: 0
-    };
-
-
-    // ==================================================
-    // UPDATE CLASS NAMES
-    // ==================================================
-
-    nameInput0.addEventListener("input", function () {
-
-        labelText0.innerText =
-            nameInput0.value.trim() || "Class 1";
-
-    });
+            classId: numeric ID supplied to KNN
+            element: HTML class panel
+            input: item name input
+            button: Add Sample button
+            countElement: sample counter
+            sampleCount: number of collected samples
+        */
+        const classRecords = new Map();
 
 
-    nameInput1.addEventListener("input", function () {
+        // =====================================================
+        // SETTINGS
+        // =====================================================
 
-        labelText1.innerText =
-            nameInput1.value.trim() || "Class 2";
-
-    });
-
-
-
-    // ==================================================
-    // CHECK LIBRARIES
-    // ==================================================
-
-    function checkLibraries() {
-
-        if (typeof tf === "undefined") {
-
-            throw new Error(
-                "TensorFlow.js failed to load."
-            );
-
+        function getConfidenceThreshold() {
+            return Number(thresholdSlider.value) / 100;
         }
 
 
-        if (typeof mobilenet === "undefined") {
+        thresholdSlider.addEventListener("input", function () {
+            thresholdValue.textContent =
+                thresholdSlider.value + "%";
+        });
 
-            throw new Error(
-                "MobileNet failed to load."
+
+        // =====================================================
+        // LIBRARY CHECK
+        // =====================================================
+
+        function checkLibraries() {
+            if (typeof tf === "undefined") {
+                throw new Error(
+                    "TensorFlow.js failed to load."
+                );
+            }
+
+            if (typeof mobilenet === "undefined") {
+                throw new Error(
+                    "MobileNet failed to load."
+                );
+            }
+
+            if (typeof knnClassifier === "undefined") {
+                throw new Error(
+                    "KNN Classifier failed to load."
+                );
+            }
+
+            console.log(
+                "TensorFlow.js version:",
+                tf.version.tfjs
             );
-
         }
 
 
-        if (typeof knnClassifier === "undefined") {
+        // =====================================================
+        // CAMERA
+        // =====================================================
 
-            throw new Error(
-                "KNN Classifier failed to load."
-            );
-
-        }
-
-
-        console.log(
-            "TensorFlow.js version:",
-            tf.version.tfjs
-        );
-
-        console.log(
-            "MobileNet library:",
-            typeof mobilenet
-        );
-
-        console.log(
-            "KNN Classifier library:",
-            typeof knnClassifier
-        );
-
-    }
-
-
-
-    // ==================================================
-    // CAMERA SETUP
-    // ==================================================
-
-    async function setupCamera() {
-
-        statusDiv.innerText =
-            "Starting camera...";
-
-
-        // Stop old camera if running
-
-        if (video.srcObject) {
+        function stopCurrentCamera() {
+            if (!video.srcObject) {
+                return;
+            }
 
             video.srcObject
                 .getTracks()
                 .forEach(function (track) {
-
                     track.stop();
-
                 });
 
             video.srcObject = null;
-
         }
 
 
-        // Camera settings
-
-        const constraints = {
-
-            video: {
-
-                facingMode: useRearCamera
-                    ? { ideal: "environment" }
-                    : { ideal: "user" },
-
-                width: {
-                    ideal: 640
-                },
-
-                height: {
-                    ideal: 480
-                }
-
-            },
-
-            audio: false
-
-        };
-
-
-        try {
-
-            const stream =
-                await navigator.mediaDevices.getUserMedia(
-                    constraints
-                );
-
-
+        async function attachCameraStream(stream) {
             video.srcObject = stream;
 
-
             await new Promise(function (resolve) {
-
-                video.onloadedmetadata =
-                    function () {
-
-                        resolve();
-
-                    };
-
+                video.onloadedmetadata = function () {
+                    resolve();
+                };
             });
 
-
             await video.play();
-
-
-            return true;
-
         }
 
-        catch (error) {
 
-            console.warn(
-                "Preferred camera failed:",
-                error
-            );
+        async function setupCamera() {
+            stopCurrentCamera();
 
+            const preferredConstraints = {
+                video: {
+                    facingMode: useRearCamera
+                        ? { ideal: "environment" }
+                        : { ideal: "user" },
 
-            // Try default camera
+                    width: {
+                        ideal: 640
+                    },
+
+                    height: {
+                        ideal: 480
+                    }
+                },
+
+                audio: false
+            };
 
             try {
+                const stream =
+                    await navigator.mediaDevices.getUserMedia(
+                        preferredConstraints
+                    );
 
-                statusDiv.innerText =
-                    "Trying default camera...";
-
+                await attachCameraStream(stream);
+            } catch (preferredError) {
+                console.warn(
+                    "Preferred camera failed:",
+                    preferredError
+                );
 
                 const fallbackStream =
                     await navigator.mediaDevices.getUserMedia({
-
                         video: true,
                         audio: false
-
                     });
 
-
-                video.srcObject =
-                    fallbackStream;
-
-
-                await new Promise(function (resolve) {
-
-                    video.onloadedmetadata =
-                        function () {
-
-                            resolve();
-
-                        };
-
-                });
-
-
-                await video.play();
-
-
-                return true;
-
+                await attachCameraStream(fallbackStream);
             }
-
-            catch (fallbackError) {
-
-                console.error(
-                    "Camera failed:",
-                    fallbackError
-                );
-
-
-                throw new Error(
-                    "Camera access failed. Please allow camera permission."
-                );
-
-            }
-
-        }
-
-    }
-
-
-
-    // ==================================================
-    // INITIALIZE SYSTEM
-    // ==================================================
-
-    async function init() {
-
-        try {
-
-            statusDiv.innerText =
-                "Checking AI libraries...";
-
-
-            // Check TensorFlow / MobileNet / KNN
-
-            checkLibraries();
-
-
-            statusDiv.innerText =
-                "Preparing TensorFlow...";
-
-
-            // Wait for TensorFlow backend
-
-            await tf.ready();
-
-
-            console.log(
-                "TensorFlow backend:",
-                tf.getBackend()
-            );
-
-
-            statusDiv.innerText =
-                "Loading MobileNet AI model...";
-
-
-            // Create KNN classifier
-
-            classifier =
-                knnClassifier.create();
-
-
-            // Load MobileNet
-
-            mobilenetModel =
-                await mobilenet.load();
-
-
-            console.log(
-                "MobileNet model loaded successfully."
-            );
-
-
-            statusDiv.innerText =
-                "Requesting camera permission...";
-
-
-            // Camera is started AFTER AI libraries load.
-
-            await setupCamera();
-
-
-            statusDiv.innerText =
-                "Ready! Point the camera at an object and add samples.";
-
-
-            btn0.disabled = false;
-
-            btn1.disabled = false;
-
-            trainBtn.disabled = false;
-
-        }
-
-        catch (error) {
-
-            console.error(
-                "Initialization Error:",
-                error
-            );
-
-
-            statusDiv.innerText =
-                "Initialization Error: " +
-                error.message;
-
-        }
-
-    }
-
-
-
-    // ==================================================
-    // ADD TRAINING SAMPLE
-    // ==================================================
-
-    function addExample(classId) {
-
-        if (!mobilenetModel ||
-            !classifier) {
-
-            statusDiv.innerText =
-                "AI model is not ready.";
-
-            return;
-
         }
 
 
-        if (video.readyState < 2) {
+        async function switchCamera() {
+            const wasPredicting = isPredicting;
 
-            statusDiv.innerText =
-                "Camera is not ready yet.";
+            stopPrediction(false);
 
-            return;
+            useRearCamera = !useRearCamera;
 
-        }
-
-
-        let activation = null;
-
-
-        try {
-
-            activation =
-                mobilenetModel.infer(
-                    video,
-                    "conv_preds"
-                );
-
-
-            classifier.addExample(
-                activation,
-                classId
-            );
-
-
-            sampleCounts[classId]++;
-
-
-            // Update sample counter
-
-            if (classId === 0) {
-
-                count0Span.innerText =
-                    sampleCounts[0] +
-                    (
-                        sampleCounts[0] === 1
-                            ? " sample"
-                            : " samples"
-                    );
-
-            }
-
-            else {
-
-                count1Span.innerText =
-                    sampleCounts[1] +
-                    (
-                        sampleCounts[1] === 1
-                            ? " sample"
-                            : " samples"
-                    );
-
-            }
-
-
-            // Get current customised class name
-
-            const currentName =
-                classId === 0
-                    ? (
-                        nameInput0.value.trim() ||
-                        "Class 1"
-                    )
-                    : (
-                        nameInput1.value.trim() ||
-                        "Class 2"
-                    );
-
-
-            statusDiv.innerText =
-                'Added sample for "' +
-                currentName +
-                '". Total classes: ' +
-                classifier.getNumClasses();
-
-
-        }
-
-        catch (error) {
-
-            console.error(
-                "Add Sample Error:",
-                error
-            );
-
-
-            statusDiv.innerText =
-                "Unable to add sample: " +
-                error.message;
-
-        }
-
-        finally {
-
-            // classifier.addExample() keeps its own
-            // representation of the example.
-            // Dispose our temporary activation.
-
-            if (activation) {
-
-                activation.dispose();
-
-            }
-
-        }
-
-    }
-
-
-
-    // ==================================================
-    // START / STOP PREDICTION
-    // ==================================================
-
-    function togglePrediction() {
-
-        if (!classifier) {
-
-            statusDiv.innerText =
-                "Classifier is not ready.";
-
-            return;
-
-        }
-
-
-        if (
-            classifier.getNumClasses() === 0
-        ) {
-
-            alert(
-                "Please add training samples first!"
-            );
-
-            return;
-
-        }
-
-
-        // STOP prediction
-
-        if (isPredicting) {
-
-            isPredicting = false;
-
-
-            trainBtn.innerText =
-                "Start Predicting";
-
-
-            statusDiv.innerText =
-                "Prediction stopped.";
-
-
-            if (predictionFrame !== null) {
-
-                cancelAnimationFrame(
-                    predictionFrame
-                );
-
-                predictionFrame = null;
-
-            }
-
-
-            return;
-
-        }
-
-
-        // START prediction
-
-        isPredicting = true;
-
-
-        trainBtn.innerText =
-            "Stop Predicting";
-
-
-        statusDiv.innerText =
-            "AI is running live prediction...";
-
-
-        runPredictionLoop();
-
-    }
-
-
-
-    // ==================================================
-    // PREDICTION LOOP
-    // ==================================================
-
-    async function runPredictionLoop() {
-
-        if (!isPredicting) {
-
-            return;
-
-        }
-
-
-        let activation = null;
-
-
-        try {
-
-            if (
-                !classifier ||
-                classifier.getNumClasses() === 0
-            ) {
-
-                isPredicting = false;
-
-                trainBtn.innerText =
-                    "Start Predicting";
-
-                return;
-
-            }
-
-
-            if (video.readyState < 2) {
-
-                predictionFrame =
-                    requestAnimationFrame(
-                        runPredictionLoop
-                    );
-
-                return;
-
-            }
-
-
-            // Get MobileNet feature vector
-
-            activation =
-                mobilenetModel.infer(
-                    video,
-                    "conv_preds"
-                );
-
-
-            // Ask KNN classifier
-
-            const result =
-                await classifier.predictClass(
-                    activation
-                );
-
-
-            // result.label can be a string.
-            // Convert it to number.
-
-            const predictedClass =
-                Number(result.label);
-
-
-            let className = "Unknown";
-
-
-            if (predictedClass === 0) {
-
-                className =
-                    nameInput0.value.trim() ||
-                    "Class 1";
-
-            }
-
-            else if (predictedClass === 1) {
-
-                className =
-                    nameInput1.value.trim() ||
-                    "Class 2";
-
-            }
-
-
-            // Read confidence
-
-            const rawConfidence =
-                result.confidences[
-                    result.label
-                ] ?? 0;
-
-
-            const confidence =
-                Math.round(
-                    rawConfidence * 100
-                );
-
-
-            predictionDiv.innerText =
-                "Prediction: " +
-                className +
-                " (" +
-                confidence +
-                "%)";
-
-        }
-
-        catch (error) {
-
-            console.error(
-                "Prediction Error:",
-                error
-            );
-
-
-            isPredicting = false;
-
-
-            trainBtn.innerText =
-                "Start Predicting";
-
-
-            statusDiv.innerText =
-                "Prediction Error: " +
-                error.message;
-
-
-            return;
-
-        }
-
-        finally {
-
-            // Prevent tensor memory buildup
-
-            if (activation) {
-
-                activation.dispose();
-
-            }
-
-        }
-
-
-        if (isPredicting) {
-
-            predictionFrame =
-                requestAnimationFrame(
-                    runPredictionLoop
-                );
-
-        }
-
-    }
-
-
-
-    // ==================================================
-    // RESET TRAINING
-    // ==================================================
-
-    function resetModel() {
-
-        // Stop prediction first
-
-        isPredicting = false;
-
-
-        if (predictionFrame !== null) {
-
-            cancelAnimationFrame(
-                predictionFrame
-            );
-
-            predictionFrame = null;
-
-        }
-
-
-        // Clear KNN classes
-
-        if (classifier) {
-
-            classifier.clearAllClasses();
-
-        }
-
-
-        sampleCounts = {
-
-            0: 0,
-            1: 0
-
-        };
-
-
-        count0Span.innerText =
-            "0 samples";
-
-
-        count1Span.innerText =
-            "0 samples";
-
-
-        trainBtn.innerText =
-            "Start Predicting";
-
-
-        predictionDiv.innerText =
-            "Prediction: Model not ready";
-
-
-        statusDiv.innerText =
-            "Model cleared. Add new samples.";
-
-    }
-
-
-
-    // ==================================================
-    // SWITCH CAMERA
-    // ==================================================
-
-    async function switchCamera() {
-
-        try {
-
-            // Temporarily stop prediction
-
-            const wasPredicting =
-                isPredicting;
-
-
-            isPredicting = false;
-
-
-            if (predictionFrame !== null) {
-
-                cancelAnimationFrame(
-                    predictionFrame
-                );
-
-                predictionFrame = null;
-
-            }
-
-
-            useRearCamera =
-                !useRearCamera;
-
-
-            toggleCamBtn.innerText =
+            toggleCameraButton.textContent =
                 useRearCamera
                     ? "Switch to Front Camera"
                     : "Switch to Rear Camera";
 
+            try {
+                statusDiv.textContent =
+                    "Switching camera...";
 
-            await setupCamera();
+                await setupCamera();
+
+                statusDiv.textContent =
+                    (useRearCamera ? "Rear" : "Front") +
+                    " camera active. AI ready.";
+
+                if (
+                    wasPredicting &&
+                    classifier &&
+                    classifier.getNumClasses() > 0
+                ) {
+                    startPrediction();
+                }
+            } catch (error) {
+                console.error(
+                    "Camera switching error:",
+                    error
+                );
+
+                statusDiv.textContent =
+                    "Camera Error: " +
+                    error.message;
+            }
+        }
 
 
-            statusDiv.innerText =
-                useRearCamera
-                    ? "Rear camera active."
-                    : "Front camera active.";
+        // =====================================================
+        // DYNAMIC ITEM CLASSES
+        // =====================================================
+
+        function getDefaultClassName(classId) {
+            return "Item " + (classId + 1);
+        }
 
 
-            // Resume prediction
+        function getClassName(classId) {
+            const record =
+                classRecords.get(classId);
+
+            if (!record) {
+                return "Unknown Item";
+            }
+
+            return (
+                record.input.value.trim() ||
+                getDefaultClassName(classId)
+            );
+        }
+
+
+        function createClassPanel() {
+            const classId = nextClassId;
+            nextClassId++;
+
+            const panel =
+                document.createElement("div");
+
+            panel.className = "class-group";
+            panel.dataset.classId = String(classId);
+
+            const heading =
+                document.createElement("div");
+
+            heading.className = "class-heading";
+            heading.textContent =
+                "Training item " + (classId + 1);
+
+
+            const input =
+                document.createElement("input");
+
+            input.type = "text";
+            input.className = "class-name";
+            input.value = getDefaultClassName(classId);
+            input.placeholder = "Enter item name";
+            input.setAttribute(
+                "aria-label",
+                "Name for item " + (classId + 1)
+            );
+
+
+            const sampleButton =
+                document.createElement("button");
+
+            sampleButton.type = "button";
+            sampleButton.className = "sample-button";
+            sampleButton.disabled =
+                !mobilenetModel || !classifier;
+
+
+            const buttonLabel =
+                document.createElement("span");
+
+            buttonLabel.textContent =
+                input.value;
+
+            sampleButton.append(
+                document.createTextNode("Add Sample: "),
+                buttonLabel
+            );
+
+
+            const footer =
+                document.createElement("div");
+
+            footer.className = "class-footer";
+
+
+            const countElement =
+                document.createElement("span");
+
+            countElement.className = "sample-count";
+            countElement.textContent = "0 samples";
+
+
+            const removeButton =
+                document.createElement("button");
+
+            removeButton.type = "button";
+            removeButton.className = "remove-button";
+            removeButton.textContent = "Remove";
+
+
+            footer.append(
+                countElement,
+                removeButton
+            );
+
+
+            panel.append(
+                heading,
+                input,
+                sampleButton,
+                footer
+            );
+
+
+            classesContainer.appendChild(panel);
+
+
+            const record = {
+                classId: classId,
+                element: panel,
+                input: input,
+                button: sampleButton,
+                buttonLabel: buttonLabel,
+                countElement: countElement,
+                sampleCount: 0
+            };
+
+
+            classRecords.set(
+                classId,
+                record
+            );
+
+
+            input.addEventListener("input", function () {
+                buttonLabel.textContent =
+                    input.value.trim() ||
+                    getDefaultClassName(classId);
+            });
+
+
+            sampleButton.addEventListener(
+                "click",
+                function () {
+                    addExample(classId);
+                }
+            );
+
+
+            removeButton.addEventListener(
+                "click",
+                function () {
+                    removeClass(classId);
+                }
+            );
+
+
+            return record;
+        }
+
+
+        function enableClassButtons() {
+            classRecords.forEach(function (record) {
+                record.button.disabled =
+                    !mobilenetModel || !classifier;
+            });
+
+            predictButton.disabled =
+                !mobilenetModel || !classifier;
+        }
+
+
+        function addEmptyClassIfNeeded(classId) {
+            const record =
+                classRecords.get(classId);
+
+            if (!record || record.sampleCount !== 1) {
+                return;
+            }
+
+            const records =
+                Array.from(classRecords.values());
+
+            const lastRecord =
+                records[records.length - 1];
+
+            /*
+                Add a new empty item after the first sample
+                is collected for the latest item.
+            */
+            if (
+                lastRecord &&
+                lastRecord.classId === classId
+            ) {
+                createClassPanel();
+
+                statusDiv.textContent =
+                    'First sample added for "' +
+                    getClassName(classId) +
+                    '". A new item has been created below.';
+            }
+        }
+
+
+        function removeClass(classId) {
+            const record =
+                classRecords.get(classId);
+
+            if (!record) {
+                return;
+            }
+
+            const wasPredicting =
+                isPredicting;
+
+            stopPrediction(false);
+
+            /*
+                Clear only this class from KNN.
+                clearClass() is available in the KNN classifier.
+            */
+            try {
+                if (
+                    classifier &&
+                    record.sampleCount > 0
+                ) {
+                    classifier.clearClass(classId);
+                }
+            } catch (error) {
+                console.warn(
+                    "Unable to clear individual class:",
+                    error
+                );
+            }
+
+            record.element.remove();
+            classRecords.delete(classId);
+
+            statusDiv.textContent =
+                "Item removed.";
+
+            if (classRecords.size === 0) {
+                createClassPanel();
+            }
+
+            const hasEmptyClass =
+                Array.from(classRecords.values())
+                    .some(function (item) {
+                        return item.sampleCount === 0;
+                    });
+
+            if (!hasEmptyClass) {
+                createClassPanel();
+            }
 
             if (
                 wasPredicting &&
                 classifier &&
                 classifier.getNumClasses() > 0
             ) {
+                startPrediction();
+            }
+        }
 
-                isPredicting = true;
 
-                trainBtn.innerText =
-                    "Stop Predicting";
+        // =====================================================
+        // ADD TRAINING SAMPLE
+        // =====================================================
 
-                runPredictionLoop();
+        function addExample(classId) {
+            const record =
+                classRecords.get(classId);
 
+            if (!record) {
+                return;
             }
 
+            if (!mobilenetModel || !classifier) {
+                statusDiv.textContent =
+                    "AI model is not ready.";
+                return;
+            }
+
+            if (video.readyState < 2) {
+                statusDiv.textContent =
+                    "Camera is not ready yet.";
+                return;
+            }
+
+            let activation = null;
+
+            try {
+                activation =
+                    mobilenetModel.infer(
+                        video,
+                        "conv_preds"
+                    );
+
+                classifier.addExample(
+                    activation,
+                    classId
+                );
+
+                record.sampleCount++;
+
+                record.countElement.textContent =
+                    record.sampleCount +
+                    (
+                        record.sampleCount === 1
+                            ? " sample"
+                            : " samples"
+                    );
+
+                const className =
+                    getClassName(classId);
+
+                statusDiv.textContent =
+                    'Added sample for "' +
+                    className +
+                    '". Total: ' +
+                    record.sampleCount +
+                    ".";
+
+                addEmptyClassIfNeeded(classId);
+            } catch (error) {
+                console.error(
+                    "Add sample error:",
+                    error
+                );
+
+                statusDiv.textContent =
+                    "Unable to add sample: " +
+                    error.message;
+            } finally {
+                if (activation) {
+                    activation.dispose();
+                }
+            }
         }
 
-        catch (error) {
 
-            console.error(
-                "Camera Switching Error:",
-                error
-            );
+        // =====================================================
+        // PREDICTION
+        // =====================================================
 
+        function startPrediction() {
+            if (!classifier) {
+                statusDiv.textContent =
+                    "Classifier is not ready.";
+                return;
+            }
 
-            statusDiv.innerText =
-                "Camera Switching Error: " +
-                error.message;
+            if (classifier.getNumClasses() === 0) {
+                alert(
+                    "Please add training samples first."
+                );
+                return;
+            }
 
+            if (isPredicting) {
+                return;
+            }
+
+            isPredicting = true;
+
+            predictButton.textContent =
+                "Stop Predicting";
+
+            statusDiv.textContent =
+                "AI is running live prediction...";
+
+            runPredictionLoop();
         }
 
-    }
 
-
-
-    // ==================================================
-    // BUTTON EVENTS
-    // ==================================================
-
-    btn0.addEventListener(
-        "click",
-        function () {
-
-            addExample(0);
-
-        }
-    );
-
-
-    btn1.addEventListener(
-        "click",
-        function () {
-
-            addExample(1);
-
-        }
-    );
-
-
-    trainBtn.addEventListener(
-        "click",
-        togglePrediction
-    );
-
-
-    resetBtn.addEventListener(
-        "click",
-        resetModel
-    );
-
-
-    toggleCamBtn.addEventListener(
-        "click",
-        switchCamera
-    );
-
-
-
-    // ==================================================
-    // START APP
-    // ==================================================
-
-    window.addEventListener(
-        "load",
-        init
-    );
-
-
-
-    // ==================================================
-    // CLEAN UP CAMERA WHEN LEAVING PAGE
-    // ==================================================
-
-    window.addEventListener(
-        "beforeunload",
-        function () {
-
+        function stopPrediction(showStatus = true) {
             isPredicting = false;
 
+            predictButton.textContent =
+                "Start Predicting";
 
             if (predictionFrame !== null) {
-
                 cancelAnimationFrame(
                     predictionFrame
                 );
 
+                predictionFrame = null;
             }
 
+            if (showStatus) {
+                statusDiv.textContent =
+                    "Prediction stopped.";
+            }
+        }
 
-            if (video.srcObject) {
 
-                video.srcObject
-                    .getTracks()
-                    .forEach(function (track) {
+        function togglePrediction() {
+            if (isPredicting) {
+                stopPrediction(true);
+            } else {
+                startPrediction();
+            }
+        }
 
-                        track.stop();
 
-                    });
-
+        async function runPredictionLoop() {
+            if (!isPredicting) {
+                return;
             }
 
+            let activation = null;
+
+            try {
+                if (
+                    !classifier ||
+                    classifier.getNumClasses() === 0
+                ) {
+                    stopPrediction(false);
+
+                    predictionDiv.textContent =
+                        "Prediction: Model not ready";
+
+                    return;
+                }
+
+                if (video.readyState < 2) {
+                    predictionFrame =
+                        requestAnimationFrame(
+                            runPredictionLoop
+                        );
+
+                    return;
+                }
+
+                activation =
+                    mobilenetModel.infer(
+                        video,
+                        "conv_preds"
+                    );
+
+                const result =
+                    await classifier.predictClass(
+                        activation
+                    );
+
+                const predictedClassId =
+                    Number(result.label);
+
+                const confidenceValue =
+                    Number(
+                        result.confidences[
+                            result.label
+                        ] || 0
+                    );
+
+                const confidencePercent =
+                    Math.round(
+                        confidenceValue * 100
+                    );
+
+                const threshold =
+                    getConfidenceThreshold();
+
+                const record =
+                    classRecords.get(
+                        predictedClassId
+                    );
+
+                /*
+                    Show Unrecognized Item when:
+
+                    1. Confidence is below the selected threshold, or
+                    2. The predicted class no longer exists in the UI.
+                */
+                if (
+                    confidenceValue < threshold ||
+                    !record
+                ) {
+                    predictionDiv.textContent =
+                        "Prediction: Unrecognized Item (" +
+                        confidencePercent +
+                        "%)";
+
+                    predictionDiv.style.color =
+                        "#ff9800";
+                } else {
+                    predictionDiv.textContent =
+                        "Prediction: " +
+                        getClassName(predictedClassId) +
+                        " (" +
+                        confidencePercent +
+                        "%)";
+
+                    predictionDiv.style.color =
+                        "#4caf50";
+                }
+            } catch (error) {
+                console.error(
+                    "Prediction error:",
+                    error
+                );
+
+                stopPrediction(false);
+
+                statusDiv.textContent =
+                    "Prediction Error: " +
+                    error.message;
+
+                return;
+            } finally {
+                if (activation) {
+                    activation.dispose();
+                }
+            }
+
+            if (isPredicting) {
+                predictionFrame =
+                    requestAnimationFrame(
+                        runPredictionLoop
+                    );
+            }
+        }
+
+
+        // =====================================================
+        // RESET
+        // =====================================================
+
+        function resetAll() {
+            stopPrediction(false);
 
             if (classifier) {
-
                 classifier.clearAllClasses();
-
             }
 
-        }
-    );
+            classRecords.forEach(function (record) {
+                record.element.remove();
+            });
 
-</script>
+            classRecords.clear();
+            nextClassId = 0;
+
+            createClassPanel();
+            enableClassButtons();
+
+            predictionDiv.textContent =
+                "Prediction: Model not ready";
+
+            predictionDiv.style.color =
+                "#4caf50";
+
+            statusDiv.textContent =
+                "All training samples cleared.";
+        }
+
+
+        // =====================================================
+        // INITIALIZATION
+        // =====================================================
+
+        async function initializeApp() {
+            try {
+                statusDiv.textContent =
+                    "Checking AI libraries...";
+
+                checkLibraries();
+
+                statusDiv.textContent =
+                    "Preparing TensorFlow...";
+
+                await tf.ready();
+
+                console.log(
+                    "TensorFlow backend:",
+                    tf.getBackend()
+                );
+
+                classifier =
+                    knnClassifier.create();
+
+                statusDiv.textContent =
+                    "Loading MobileNet model...";
+
+                mobilenetModel =
+                    await mobilenet.load();
+
+                statusDiv.textContent =
+                    "Requesting camera permission...";
+
+                await setupCamera();
+
+                enableClassButtons();
+
+                statusDiv.textContent =
+                    "Ready! Name an item and add training samples.";
+            } catch (error) {
+                console.error(
+                    "Initialization error:",
+                    error
+                );
+
+                statusDiv.textContent =
+                    "Initialization Error: " +
+                    error.message;
+            }
+        }
+
+
+        // =====================================================
+        // EVENTS
+        // =====================================================
+
+        addClassButton.addEventListener(
+            "click",
+            function () {
+                const newRecord =
+                    createClassPanel();
+
+                newRecord.input.focus();
+
+                statusDiv.textContent =
+                    "New training item added.";
+            }
+        );
+
+
+        toggleCameraButton.addEventListener(
+            "click",
+            switchCamera
+        );
+
+
+        predictButton.addEventListener(
+            "click",
+            togglePrediction
+        );
+
+
+        resetButton.addEventListener(
+            "click",
+            resetAll
+        );
+
+
+        window.addEventListener(
+            "load",
+            function () {
+                /*
+                    Begin with one item. Another item will
+                    appear after its first sample is added.
+                */
+                createClassPanel();
+                initializeApp();
+            }
+        );
+
+
+        window.addEventListener(
+            "beforeunload",
+            function () {
+                stopPrediction(false);
+                stopCurrentCamera();
+
+                if (classifier) {
+                    classifier.clearAllClasses();
+                }
+            }
+        );
+    </script>
 
 </body>
 </html>
