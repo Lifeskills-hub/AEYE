@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Custom Named Camera Training</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; background: #121212; color: #fff; margin: 20px; }
+        video { border: 2px solid #444; border-radius: 8px; transform: scaleX(-1); }
+        .controls { margin-top: 15px; }
+        .class-group { margin: 10px 0; }
+        input[type="text"] { padding: 8px; font-size: 14px; border-radius: 4px; border: 1px solid #555; background: #222; color: #fff; margin-right: 5px; width: 140px; }
+        button { padding: 9px 14px; font-size: 14px; cursor: pointer; background: #00bcd4; border: none; border-radius: 4px; font-weight: bold; color: #fff; }
+        button:hover { background: #008ba3; }
+        #status { font-size: 1.2rem; margin: 15px 0; color: #ff9800; font-weight: bold; }
+        #prediction { font-size: 1.5rem; color: #4CAF50; margin-top: 15px; font-weight: bold; }
+        .action-btns { margin-top: 20px; }
+    </style>
+
+    <!-- Load TensorFlow.js, MobileNet, and KNN Classifier -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.11.0/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.0/dist/mobilenet.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/knn-classifier@1.2.3/dist/knn-classifier.min.js"></script>
+</head>
+<body>
+
+    <h2>Train Custom Named Objects (JS)</h2>
+    <div id="status">Loading AI Base Model...</div>
+
+    <div>
+        <video id="webcam" autoplay playsinline width="400" height="300"></video>
+    </div>
+
+    <div class="controls">
+        <!-- Class 0 Control -->
+        <div class="class-group">
+            <input type="text" id="name-0" value="Coffee Mug">
+            <button id="btn-0">Add Sample: <span id="label-text-0">Coffee Mug</span></button>
+            <span id="count-0" style="margin-left: 10px; color: #aaa;">(0 samples)</span>
+        </div>
+
+        <!-- Class 1 Control -->
+        <div class="class-group">
+            <input type="text" id="name-1" value="Smartphone">
+            <button id="btn-1">Add Sample: <span id="label-text-1">Smartphone</span></button>
+            <span id="count-1" style="margin-left: 10px; color: #aaa;">(0 samples)</span>
+        </div>
+
+        <div class="action-btns">
+            <button id="train" style="background: #4CAF50;">Start Predicting</button>
+            <button id="reset" style="background: #f44336;">Reset All</button>
+        </div>
+    </div>
+
+    <div id="prediction">Prediction: Model not trained yet</div>
+
+    <script>
+        const video = document.getElementById('webcam');
+        const statusDiv = document.getElementById('status');
+        const predictionDiv = document.getElementById('prediction');
+
+        const nameInput0 = document.getElementById('name-0');
+        const nameInput1 = document.getElementById('name-1');
+        const labelText0 = document.getElementById('label-text-0');
+        const labelText1 = document.getElementById('label-text-1');
+        const count0Span = document.getElementById('count-0');
+        const count1Span = document.getElementById('count-1');
+
+        let classifier = null;
+        let mobilenetModel = null;
+        let isPredicting = false;
+        
+        let sampleCounts = { 0: 0, 1: 0 };
+
+        // Keep button labels synced with text box inputs in real time
+        nameInput0.addEventListener('input', () => { labelText0.innerText = nameInput0.value || "Class 1"; });
+        nameInput1.addEventListener('input', () => { labelText1.innerText = nameInput1.value || "Class 2"; });
+
+        async function init() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: { width: 400, height: 300 } });
+                video.srcObject = stream;
+            } catch (err) {
+                alert("Camera access denied or unavailable.");
+                return;
+            }
+
+            classifier = knnClassifier.create();
+            mobilenetModel = await mobilenet.load();
+            
+            statusDiv.innerText = "Ready! Type custom names, point your camera, and add samples.";
+
+            document.getElementById('btn-0').addEventListener('click', () => addExample(0));
+            document.getElementById('btn-1').addEventListener('click', () => addExample(1));
+            document.getElementById('train').addEventListener('click', startPredicting);
+            document.getElementById('reset').addEventListener('click', resetModel);
+        }
+
+        function addExample(classId) {
+            const activation = mobilenetModel.infer(video, "conv_preds");
+            classifier.addExample(activation, classId);
+            
+            sampleCounts[classId]++;
+            if (classId === 0) {
+                count0Span.innerText = `(${sampleCounts[0]} samples)`;
+            } else {
+                count1Span.innerText = `(${sampleCounts[1]} samples)`;
+            }
+
+            const currentName = classId === 0 ? nameInput0.value : nameInput1.value;
+            statusDiv.innerText = `Added sample for "${currentName}". Total classes ready: ${classifier.getNumClasses()}`;
+        }
+
+        async function startPredicting() {
+            if (classifier.getNumClasses() === 0) {
+                alert("Please add training samples first!");
+                return;
+            }
+            isPredicting = true;
+            statusDiv.innerText = "AI is running live prediction...";
+            runPredictionLoop();
+        }
+
+        async function runPredictionLoop() {
+            if (!isPredicting) return;
+
+            const activation = mobilenetModel.infer(video, "conv_preds");
+            const result = await classifier.predictClass(activation);
+
+            // Fetch current custom name from input field dynamically
+            const className = result.label === 0 ? nameInput0.value : nameInput1.value;
+            const confidence = Math.round(result.confidences[result.label] * 100);
+
+            predictionDiv.innerText = `Prediction: ${className} (${confidence}% confidence)`;
+
+            requestAnimationFrame(runPredictionLoop);
+        }
+
+        function resetModel() {
+            isPredicting = false;
+            classifier.clearAllClasses();
+            sampleCounts = { 0: 0, 1: 0 };
+            count0Span.innerText = "(0 samples)";
+            count1Span.innerText = "(0 samples)";
+            statusDiv.innerText = "Model cleared. Start fresh by adding samples.";
+            predictionDiv.innerText = "Prediction: Model not trained yet";
+        }
+
+        window.onload = init;
+    </script>
+
+</body>
+</html>
