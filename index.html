@@ -19,10 +19,10 @@
         .action-row { display: flex; gap: 10px; margin-top: 10px; }
     </style>
 
-    <!-- Switched to unpkg CDN to bypass strict jsDelivr/network blocks -->
-    <script src="https://unpkg.com/@tensorflow/tfjs@3.11.0/dist/tf.min.js"></script>
-    <script src="https://unpkg.com/@tensorflow-models/mobilenet@2.1.0/dist/mobilenet.min.js"></script>
-    <script src="https://unpkg.com/@tensorflow-models/knn-classifier@1.2.3/dist/knn-classifier.min.js"></script>
+    <!-- Reliable CDNJS Links -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tensorflow/3.11.0/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.0/dist/mobilenet.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/knn-classifier@1.2.3/dist/knn-classifier.min.js"></script>
 </head>
 <body>
 
@@ -119,10 +119,13 @@
                 statusDiv.innerText = "Requesting camera permissions...";
                 await setupCamera();
 
-                statusDiv.innerText = "Loading AI models from unpkg CDN...";
+                statusDiv.innerText = "Loading AI models...";
+
+                // Brief pause to ensure global script execution context is fully bound
+                await new Promise(resolve => setTimeout(resolve, 500));
 
                 if (typeof tf === 'undefined' || typeof mobilenet === 'undefined' || typeof knnClassifier === 'undefined') {
-                    throw new Error("TensorFlow scripts failed to load. Check network/adblockers.");
+                    throw new Error("Libraries failed to register globally.");
                 }
 
                 classifier = knnClassifier.create();
